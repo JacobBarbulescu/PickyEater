@@ -1,3 +1,20 @@
+# 1. Install root dev dependencies
+npm install
+
+# 2. Install backend/frontend
+npm run install:all
+
+# 3: copy env file and fill in necessary components
+cp backend/.env.example backend/.env
+fill in session, mongo_uri, and redis_url (get later)
+
+# 4: After Mongo/Redis running:
+npm run dev
+
+View backend on localhost:5000
+View frontend on localhost:5173
+
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
