@@ -1,20 +1,18 @@
-//template
 import { ObjectId } from 'mongodb';
 import { users } from '../config/mongoCollections.js';
 import bcrypt from 'bcryptjs';
+import validation from '../validation.js';
 
 const exportedMethods = {
     async createUser(email, username, password) {
-        if (!email || !username || !password) throw 'All fields need to have valid values';
-        email = email.trim().toLowerCase();
-        username = username.trim();
-
-        if (password.length < 6) throw 'Password must be at least 6 characters long';
+        email = validation.checkEmail(email);
+        username = validation.checkUsername(username);
+        password = validation.checkPassword(password);
         const userCollection = await users();
         const existingUser = await userCollection.findOne({ email: email });
         if (existingUser) throw 'Email is already in use';
         
-        const hashedPassword = await bcrypt.hash(password, 16);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = {
             email: email,
@@ -31,8 +29,8 @@ const exportedMethods = {
     },
     
     async login(email, password) {
-        if (!email || !password) throw 'Email and password are required';
-        email = email.trim().toLowerCase();
+        email = validation.checkEmail(email);
+        password = validation.checkString(password, 'Password');
         const userCollection = await users();
         const user = await userCollection.findOne({ email: email });
         if (!user) throw 'Invalid email or password';
