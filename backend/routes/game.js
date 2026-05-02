@@ -32,6 +32,7 @@ router.post('/guess', async (req, res) => {
 
         const isCorrect = guessedFoodId === correctFoodId;
 
+        // If correct guess increment score by 1
         if (isCorrect) {
             const userCollection = await users();
             await userCollection.updateOne(
