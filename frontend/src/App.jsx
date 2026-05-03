@@ -17,18 +17,20 @@ function App() {
     return (
         <div>
             <Navbar />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/game" element={<ProtectedRoute><Game /></ProtectedRoute>} />
-                <Route path="/vote" element={<ProtectedRoute><Vote /></ProtectedRoute>} />
-                <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/upload" element={<ProtectedRoute adminOnly={true}><Upload /></ProtectedRoute>} />
-                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="/admin" element={<ProtectedRoute adminOnly={true}><Admin /></ProtectedRoute>} />
-            </Routes>
+            <div className="page-content">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/game" element={<ProtectedRoute><Game /></ProtectedRoute>} />
+                    <Route path="/vote" element={<ProtectedRoute><Vote /></ProtectedRoute>} />
+                    <Route path="/leaderboard" element={<Leaderboard />} />
+                    <Route path="/search" element={<Search />} />
+                    <Route path="/upload" element={<ProtectedRoute adminOnly={true}><Upload /></ProtectedRoute>} />
+                    <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                    <Route path="/admin" element={<ProtectedRoute adminOnly={true}><Admin /></ProtectedRoute>} />
+                </Routes>
+            </div>
         </div>
     )
 }

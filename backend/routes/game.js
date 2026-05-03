@@ -26,13 +26,20 @@ router.post('/guess', async (req, res) => {
         const food1 = await foodData.getFoodById(food1Id);
         const food2 = await foodData.getFoodById(food2Id);
 
-        const correctFoodId = food1.totalVotes >= food2.totalVotes
+        const food1WinRate = food1.wins / (food1.totalVotes + 1);
+        const food2WinRate = food2.wins / (food2.totalVotes + 1);
+
+        // Tie logic
+        if (food1WinRate === food2WinRate) {
+            return res.json({ tie: true, food1, food2 });
+        }
+
+        const correctFoodId = food1WinRate >= food2WinRate
             ? food1._id.toString()
             : food2._id.toString();
 
         const isCorrect = guessedFoodId === correctFoodId;
 
-        // If correct guess increment score by 1
         if (isCorrect) {
             const userCollection = await users();
             await userCollection.updateOne(
