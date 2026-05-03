@@ -2,12 +2,14 @@ import { dbConnection, closeConnection } from './config/mongoConnection.js';
 import { foods } from './config/mongoCollections.js';
 
 const seedFoods = [
-    { name: 'Pizza', imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 120, wins: 80, createdAt: new Date() },
-    { name: 'Burger', imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 95, wins: 60, createdAt: new Date() },
-    { name: 'Sushi', imageUrl: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 88, wins: 55, createdAt: new Date() },
-    { name: 'Tacos', imageUrl: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 76, wins: 45, createdAt: new Date() },
-    { name: 'Pasta', imageUrl: 'https://images.unsplash.com/photo-1551183053-bf91798d454b?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 65, wins: 40, createdAt: new Date() },
-    { name: 'Fried Chicken', imageUrl: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 110, wins: 70, createdAt: new Date() },
+    { name: 'Pizza', imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 80, createdAt: new Date() },
+    { name: 'Burger', imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 60, createdAt: new Date() },
+    { name: 'Sushi', imageUrl: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 55, createdAt: new Date() },
+    { name: 'Tacos', imageUrl: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 45, createdAt: new Date() },
+    { name: 'Pasta', imageUrl: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 40, createdAt: new Date() },
+    { name: 'Fried Chicken', imageUrl: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 70, createdAt: new Date() },
+    { name: 'Hot Dog', imageUrl: 'https://images.unsplash.com/photo-1612392061787-2d47340a1c7e?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 50, createdAt: new Date() },
+    { name: 'Ice Cream', imageUrl: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 50, createdAt: new Date() },
 ];
 
 async function seed() {
