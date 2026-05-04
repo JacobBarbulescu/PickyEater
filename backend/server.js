@@ -15,7 +15,7 @@ import { initVoteSocket } from './sockets/voteSocket.js';
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-    cors: { origin: '*' }
+  cors: { origin: '*' }
 });
 
 const PORT = process.env.PORT || 5000;
@@ -34,7 +34,7 @@ initVoteSocket(io);
 async function start() {
   await dbConnection();
   httpServer.listen(PORT, () => {
-      console.log('Server running on port ' + PORT);
+    console.log('Server running on port ' + PORT);
   });
 }
 
