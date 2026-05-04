@@ -18,7 +18,7 @@ router.get('/pair', async (req, res) => {
 
 // Body: { userId, guessedFoodId, food1Id, food2Id }
 router.post('/guess', async (req, res) => {
-    const { userId, guessedFoodId, food1Id, food2Id } = req.body;
+    const { userId, guessedFoodId, food1Id, food2Id, currentScore } = req.body;
     if (!userId || !guessedFoodId || !food1Id || !food2Id) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
@@ -42,9 +42,14 @@ router.post('/guess', async (req, res) => {
 
         if (isCorrect) {
             const userCollection = await users();
+            const newSessionScore = (currentScore || 0) + 1;
+
             await userCollection.updateOne(
                 { _id: new ObjectId(userId) },
-                { $inc: { score: 1 } }
+                { 
+                    $inc: { score: 1 },
+                    $max: { bestScore: newSessionScore }
+                }
             );
         }
 
@@ -54,6 +59,17 @@ router.post('/guess', async (req, res) => {
             food1: food1,
             food2: food2
         });
+    } catch (e) {
+        return res.status(500).json({ error: e });
+    }
+});
+
+router.get('/bestscore/:userId', async (req, res) => {
+    try {
+        const userCollection = await users();
+        const user = await userCollection.findOne({ _id: new ObjectId(req.params.userId) });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        return res.json({ bestScore: user.bestScore || 0 });
     } catch (e) {
         return res.status(500).json({ error: e });
     }

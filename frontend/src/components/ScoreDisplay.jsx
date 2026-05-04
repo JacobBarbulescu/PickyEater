@@ -1,7 +1,7 @@
 // Eli — animated +1 / correct/wrong reveal shown after each game guess
 import { useEffect, useState } from 'react';
 
-const ScoreDisplay = ({ score, result, timeLeft }) => {
+const ScoreDisplay = ({ score, result, timeLeft, bestScore }) => {
     const [showDelta, setShowDelta] = useState(false);
 
     useEffect(() => {
@@ -15,6 +15,7 @@ const ScoreDisplay = ({ score, result, timeLeft }) => {
     return (
         <div>
             <p>Score: {score}</p>
+            <p>Best Score: {bestScore}</p>
             {!result && <p>Time Left: {timeLeft}</p>}
             {result && (
                 <div>

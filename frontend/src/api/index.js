@@ -12,8 +12,10 @@ api.interceptors.request.use(config => {
     return config;
 });
 
+// Main game
 export const getGameRound = () => api.get('/game/pair');
-export const submitGuess = (userId, guessedFoodId, food1Id, food2Id) => 
-    api.post('/game/guess', { userId, guessedFoodId, food1Id, food2Id });
+export const submitGuess = (userId, guessedFoodId, food1Id, food2Id, currentScore) =>
+    api.post('/game/guess', { userId, guessedFoodId, food1Id, food2Id, currentScore });
+export const getBestScore = (userId) => api.get(`/game/bestscore/${userId}`);
 
 export default api;
