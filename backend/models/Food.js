@@ -30,7 +30,7 @@ const exportedMethods = {
         uploadedBy = validation.checkString(uploadedBy, 'Uploaded By');
 
         if (name.length < 2) throw 'Name must be at least 2 characters';
-        if (name.length > 50) throw 'Name must be under 50 characters';
+        if (name.length > 30) throw 'Name must be under 30 characters';
         if (!imageUrl.startsWith('/uploads/') && !imageUrl.startsWith('http'))
             throw 'Invalid image URL';
         if (!ObjectId.isValid(uploadedBy)) throw 'Invalid user ID';
