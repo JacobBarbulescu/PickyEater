@@ -26,7 +26,7 @@ const exportedMethods = {
         };
 
         const insertInfo = await userCollection.insertOne(newUser);
-        if (insertInfo.insertedCount === 0) throw 'Could not create user';
+        if (!insertInfo.acknowledged) throw 'Could not create user';
         return { registrationSuccess: true };
     },
     
@@ -45,10 +45,11 @@ const exportedMethods = {
             username: user.username,
             role: user.role,
             score: user.score,
-            bestScore: user.bestScore
+            bestScore: user.bestScore,
+            numVotes: user.numVotes
         }
     },
-    
+
     async getUserById(id) {
         const userCollection = await users();
         const user = await userCollection.findOne({ _id: new ObjectId(id) });
