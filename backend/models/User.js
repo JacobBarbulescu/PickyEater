@@ -20,6 +20,7 @@ const exportedMethods = {
             password: hashedPassword,
             role: 'user',
             score: 0,
+            bestScore: 0,
             createdAt: new Date()
         };
 
@@ -42,7 +43,8 @@ const exportedMethods = {
             email: user.email,
             username: user.username,
             role: user.role,
-            score: user.score
+            score: user.score,
+            bestScore: user.bestScore
         }
     },
     async getUserById(id) {
