@@ -61,9 +61,8 @@ router.post('/guess', async (req, res) => {
 
 router.get('/bestscore/:userId', async (req, res) => {
     try {
-        const userCollection = await users();
-        const user = await userCollection.findOne({ _id: new ObjectId(req.params.userId) });
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        const userId = req.params.userId;
+        const user = await userData.getUserById(userId);
         return res.json({ bestScore: user.bestScore || 0 });
     } catch (e) {
         return res.status(500).json({ error: e });
