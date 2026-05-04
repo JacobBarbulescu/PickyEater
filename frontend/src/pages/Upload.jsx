@@ -30,6 +30,8 @@ function Upload() {
                 body: formData
             });
 
+            if (!response.ok) throw "Failed to upload image";
+
             navigate("/");
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error) {

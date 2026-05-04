@@ -43,12 +43,8 @@ function ImageCropper({ image, setCroppedImage }) {
     //When we update the image's crop, calculate the cropped image
     const onCropComplete = useCallback(async (_, croppedAreaPixels) => {
         if (image) {
-            try {
-                const croppedBlob = await getCroppedImage(image, croppedAreaPixels);
-                setCroppedImage(croppedBlob);
-            } catch (error) {
-                console.error("Failed to crop image:", error);
-            }
+            const croppedBlob = await getCroppedImage(image, croppedAreaPixels);
+            setCroppedImage(croppedBlob);
         }
     }, [image]);
 
