@@ -21,6 +21,7 @@ const exportedMethods = {
             role: 'user',
             score: 0,
             bestScore: 0,
+            numVotes: 0,
             createdAt: new Date()
         };
 
@@ -47,12 +48,39 @@ const exportedMethods = {
             bestScore: user.bestScore
         }
     },
+    
     async getUserById(id) {
         const userCollection = await users();
         const user = await userCollection.findOne({ _id: new ObjectId(id) });
         if (!user) throw 'User not found';
         return user;
-    }
+    },
+
+    async updateScoreAndBest(userId, currentScore) {
+        if (!userId) throw 'User ID is required';
+        if (!ObjectId.isValid(userId)) throw 'Invalid user ID';
+        currentScore = validation.checkInt(currentScore, 'Current score');
+
+        const userCollection = await users();
+        const newSessionScore = currentScore + 1;
+        await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            {
+                $inc: { score: 1 },
+                $max: { bestScore: newSessionScore }
+            }
+        );
+    },
+
+    async incrementNumVotes(userId) {
+        if (!userId) throw 'User ID is required';
+        if (!ObjectId.isValid(userId)) throw 'Invalid user ID';
+        const userCollection = await users();
+        await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $inc: { numVotes: 1 } }
+        );
+    },
 };
 
 export default exportedMethods;

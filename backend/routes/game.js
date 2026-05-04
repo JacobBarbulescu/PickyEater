@@ -3,6 +3,7 @@ import express from 'express';
 import foodData from '../models/Food.js';
 import { users } from '../config/mongoCollections.js';
 import { ObjectId } from 'mongodb';
+import userData from '../models/User.js';
 
 const router = express.Router();
 
@@ -40,17 +41,11 @@ router.post('/guess', async (req, res) => {
 
         const isCorrect = guessedFoodId === correctFoodId;
 
-        if (isCorrect) {
-            const userCollection = await users();
-            const newSessionScore = (currentScore || 0) + 1;
+        // Increment total votes of user
+        await userData.incrementNumVotes(userId);
 
-            await userCollection.updateOne(
-                { _id: new ObjectId(userId) },
-                { 
-                    $inc: { score: 1 },
-                    $max: { bestScore: newSessionScore }
-                }
-            );
+        if (isCorrect) {
+            await userData.updateScoreAndBest(userId, currentScore);
         }
 
         return res.json({
