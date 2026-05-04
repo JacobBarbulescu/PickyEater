@@ -9,6 +9,7 @@ import gameRoutes from './routes/game.js';
 import leaderboardRoutes from './routes/leaderboard.js';
 import cors from 'cors';
 import { initVoteSocket } from './sockets/voteSocket.js';
+import adminRoutes from './routes/admin.js';
 
 //more imports here
 
@@ -25,6 +26,7 @@ app.use(express.json());
 
 //Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/game', gameRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 

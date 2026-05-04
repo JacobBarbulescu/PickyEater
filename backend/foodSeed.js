@@ -10,6 +10,9 @@ const seedFoods = [
     { name: 'Fried Chicken', imageUrl: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 70, createdAt: new Date() },
     { name: 'Hot Dog', imageUrl: 'https://images.unsplash.com/photo-1612392061787-2d47340a1c7e?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 50, createdAt: new Date() },
     { name: 'Ice Cream', imageUrl: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 50, createdAt: new Date() },
+    //These ones are for testing the admin dashboard, status: "pending"
+    { name: 'Ramen', imageUrl: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400', uploadedBy: 'testuser', status: 'pending', totalVotes: 0, wins: 0, createdAt: new Date() },
+    { name: 'Nachos', imageUrl: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=400', uploadedBy: 'testuser', status: 'pending', totalVotes: 0, wins: 0, createdAt: new Date() },
 ];
 
 async function seed() {
