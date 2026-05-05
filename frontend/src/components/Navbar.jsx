@@ -17,6 +17,7 @@ function Navbar() {
             <Link to="/game">Game</Link>
             <Link to="/vote">Vote</Link>
             <Link to="/leaderboard">Leaderboard</Link>
+            <Link to="/upload">Upload</Link>
             <Link to="/search">Search</Link>
             {currentUser ? (
                 <span className="navbar-right">
@@ -24,7 +25,7 @@ function Navbar() {
                     {currentUser.role === 'admin' && <Link to="/admin">Admin</Link>}
                     <button onClick={handleLogout}>Logout</button>
                 </span>
-            ): (
+            ) : (
                 <Link to="/login">Login</Link>
             )}
         </nav>
@@ -32,4 +33,3 @@ function Navbar() {
 }
 
 export default Navbar;
-        
