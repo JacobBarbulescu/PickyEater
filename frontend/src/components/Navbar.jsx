@@ -20,7 +20,7 @@ function Navbar() {
             <Link to="/search">Search</Link>
             {currentUser ? (
                 <span className="navbar-right">
-                    <Link to="/profile">{currentUser.username}</Link>
+                    <Link to="/profile">Profile</Link>
                     {currentUser.role === 'admin' && <Link to="/admin">Admin</Link>}
                     <button onClick={handleLogout}>Logout</button>
                 </span>

@@ -48,15 +48,17 @@ function AdminDashboard() {
             {pendingFoods.length === 0 ? (
                 <p>No pending foods</p>
             ) : (
-                <ul>
+                <div className="admin-list">
                     {pendingFoods.map((food) => (
-                        <li key={food._id}>
-                            <span>{food.name}</span>
-                            <button onClick={() => approveFood(food._id)}>Approve</button>
-                            <button onClick={() => rejectFood(food._id)}>Reject</button>
-                        </li>
+                        <div key={food._id} className="admin-item">
+                            <h2 className="admin-food-name">{food.name}</h2>
+                            <div>
+                                <button onClick={() => approveFood(food._id)}>Approve</button>
+                                <button onClick={() => rejectFood(food._id)}>Reject</button>
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     )
