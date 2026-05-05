@@ -13,8 +13,6 @@ function Upload() {
 
     const [error, setError] = useState(null);
 
-    const [test, setTest] = useState(null);
-
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -40,10 +38,9 @@ function Upload() {
                 responseType: 'blob'
             });
 
-            const blob = response.data;
-            setTest(URL.createObjectURL(blob));
 
-            //navigate("/");
+
+            navigate("/");
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error) {
                 setError(error.response.data.error);
@@ -72,8 +69,6 @@ function Upload() {
 
                 <button type="submit">Upload Food</button>
             </form>
-
-            {test && <img src={test} />}
         </div>
     )
 }
