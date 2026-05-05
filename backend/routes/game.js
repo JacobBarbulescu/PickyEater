@@ -3,6 +3,7 @@ import express from 'express';
 import foodData from '../models/Food.js';
 import { users } from '../config/mongoCollections.js';
 import { ObjectId } from 'mongodb';
+import userData from '../models/User.js';
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get('/pair', async (req, res) => {
 
 // Body: { userId, guessedFoodId, food1Id, food2Id }
 router.post('/guess', async (req, res) => {
-    const { userId, guessedFoodId, food1Id, food2Id } = req.body;
+    const { userId, guessedFoodId, food1Id, food2Id, currentScore } = req.body;
     if (!userId || !guessedFoodId || !food1Id || !food2Id) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
@@ -40,12 +41,11 @@ router.post('/guess', async (req, res) => {
 
         const isCorrect = guessedFoodId === correctFoodId;
 
+        // Increment total votes of user
+        await userData.incrementNumVotes(userId);
+
         if (isCorrect) {
-            const userCollection = await users();
-            await userCollection.updateOne(
-                { _id: new ObjectId(userId) },
-                { $inc: { score: 1 } }
-            );
+            await userData.updateScoreAndBest(userId, currentScore);
         }
 
         return res.json({
@@ -54,6 +54,16 @@ router.post('/guess', async (req, res) => {
             food1: food1,
             food2: food2
         });
+    } catch (e) {
+        return res.status(500).json({ error: e });
+    }
+});
+
+router.get('/bestscore/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await userData.getUserById(userId);
+        return res.json({ bestScore: user.bestScore || 0 });
     } catch (e) {
         return res.status(500).json({ error: e });
     }

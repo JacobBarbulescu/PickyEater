@@ -38,6 +38,14 @@ const exportedMethods = {
     if (!/[0-9]/.test(password)) throw 'Password must contain at least one number';
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) throw 'Password must contain at least one special character';
     return password;
+  },
+
+  checkInt(val, varName) {
+    if (val === undefined || val === null) throw `${varName} is required`;
+    if (typeof val !== 'number') throw `${varName} must be a number`;
+    if (!Number.isInteger(val)) throw `${varName} must be an integer`;
+    if (val < 0) throw `${varName} cannot be negative`;
+    return val;
   }
 
 };

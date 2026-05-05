@@ -1,6 +1,6 @@
 // Eli — main PickyEater game: shows two foods, user picks most popular, reveals result + score delta
 import { useState, useEffect, useRef } from 'react';
-import { getGameRound, submitGuess } from '../api/index.js';
+import { getGameRound, submitGuess, getBestScore } from '../api/index.js';
 import { useAuth } from '../hooks/useAuth.js';
 import FoodCard from '../components/FoodCard.jsx';
 import ScoreDisplay from '../components/ScoreDisplay.jsx';
@@ -31,6 +31,8 @@ const Game = () => {
     const food2Ref = useRef(null);
     const scoreRef = useRef(0);
     const location = useLocation();
+    const [bestScore, setBestScore] = useState(0);
+
 
     // keep scoreRef in sync so timer can access latest score
     useEffect(() => {
@@ -107,6 +109,7 @@ const Game = () => {
         fetchRound();
     };
 
+    // Resets game when naviagating to page
     useEffect(() => {
         setScore(0);
         scoreRef.current = 0;
@@ -120,6 +123,19 @@ const Game = () => {
         return () => clearTimer();
     }, [location.key]);
 
+    // Fetch best score
+    useEffect(() => {
+        const fetchBestScore = async () => {
+            try {
+                const res = await getBestScore(currentUser.id);
+                setBestScore(res.data.bestScore);
+            } catch (e) {
+                console.error('Could not fetch best score');
+            }
+        };
+        fetchBestScore();
+    }, []);
+
     // Handles if player guess correctly or incorrectly accordingly
     const handleGuess = async (guessedFood) => {
         if (result || timedOut || gameOver) return;
@@ -131,7 +147,8 @@ const Game = () => {
                 currentUser.id,
                 guessedFood._id,
                 food1._id,
-                food2._id
+                food2._id,
+                score
             );
             setResult(res.data);
 
@@ -142,7 +159,11 @@ const Game = () => {
 
             // Correct
             if (res.data.correct) {
-                setScore(prev => prev + 1);
+                setScore(prev => {
+                    const newScore = prev + 1;
+                    if (newScore > bestScore) setBestScore(newScore);
+                    return newScore;
+                });
                 setCorrectFoodId(res.data.correctFoodId);
                 setFlash('flash-correct');
                 setShowPlusOne(true);
@@ -208,6 +229,7 @@ const Game = () => {
                 score={score}
                 result={result}
                 timeLeft={timeLeft}
+                bestScore={bestScore}
             />
 
             {result && result.tie && (

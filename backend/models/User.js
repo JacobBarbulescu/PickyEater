@@ -20,11 +20,13 @@ const exportedMethods = {
             password: hashedPassword,
             role: 'user',
             score: 0,
+            bestScore: 0,
+            numVotes: 0,
             createdAt: new Date()
         };
 
         const insertInfo = await userCollection.insertOne(newUser);
-        if (insertInfo.insertedCount === 0) throw 'Could not create user';
+        if (!insertInfo.acknowledged) throw 'Could not create user';
         return { registrationSuccess: true };
     },
     
@@ -42,15 +44,44 @@ const exportedMethods = {
             email: user.email,
             username: user.username,
             role: user.role,
-            score: user.score
+            score: user.score,
+            bestScore: user.bestScore,
+            numVotes: user.numVotes
         }
     },
+
     async getUserById(id) {
         const userCollection = await users();
         const user = await userCollection.findOne({ _id: new ObjectId(id) });
         if (!user) throw 'User not found';
         return user;
-    }
+    },
+
+    async updateScoreAndBest(userId, currentScore) {
+        if (!userId) throw 'User ID is required';
+        if (!ObjectId.isValid(userId)) throw 'Invalid user ID';
+        currentScore = validation.checkInt(currentScore, 'Current score');
+
+        const userCollection = await users();
+        const newSessionScore = currentScore + 1;
+        await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            {
+                $inc: { score: 1 },
+                $max: { bestScore: newSessionScore }
+            }
+        );
+    },
+
+    async incrementNumVotes(userId) {
+        if (!userId) throw 'User ID is required';
+        if (!ObjectId.isValid(userId)) throw 'Invalid user ID';
+        const userCollection = await users();
+        await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $inc: { numVotes: 1 } }
+        );
+    },
 };
 
 export default exportedMethods;
