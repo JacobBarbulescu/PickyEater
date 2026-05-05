@@ -1,7 +1,7 @@
 // Jason — lists pending food submissions; approve / reject via PATCH|DELETE /api/admin
 import React, { useEffect, useState } from 'react';
 import api from '../api/index';
-import '../App.css';
+
 
 function AdminDashboard() {
     const [pendingFoods, setPendingFoods] = useState([]);
@@ -13,7 +13,7 @@ function AdminDashboard() {
                 const res = await api.get('/admin/pending');
                 setPendingFoods(res.data);
             } catch (e) {
-                setMessage('Error loading pending foods');
+                console.error('Error loading pending foods:', e);
             }
         }
         load();
@@ -25,6 +25,7 @@ function AdminDashboard() {
             setMessage('Food approved');
             setPendingFoods(prev => prev.filter(f => f._id !== id));
         } catch (e) {
+            console.error('Error approving food:', e);
             setMessage('Error approving food');
         }
     }
@@ -35,6 +36,7 @@ function AdminDashboard() {
             setMessage('Food rejected and deleted');
             setPendingFoods(prev => prev.filter(f => f._id !== id));
         } catch (e) {
+            console.error('Error rejecting food:', e);
             setMessage('Error rejecting food');
         }
     }
@@ -46,17 +48,15 @@ function AdminDashboard() {
             {pendingFoods.length === 0 ? (
                 <p>No pending foods</p>
             ) : (
-                <div className="admin-list">
+                <ul>
                     {pendingFoods.map((food) => (
-                        <div key={food._id} className="admin-item">
-                            <span className="admin-food-name">{food.name}</span>
-                            <div>
-                                <button className="btn" onClick={() => approveFood(food._id)}>Approve</button>
-                                <button className="btn" onClick={() => rejectFood(food._id)}>Reject</button>
-                            </div>
-                        </div>
+                        <li key={food._id}>
+                            <span>{food.name}</span>
+                            <button onClick={() => approveFood(food._id)}>Approve</button>
+                            <button onClick={() => rejectFood(food._id)}>Reject</button>
+                        </li>
                     ))}
-                </div>
+                </ul>
             )}
         </div>
     )
