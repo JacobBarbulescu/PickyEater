@@ -1,13 +1,19 @@
 // Jacob — food upload form; uses UploadForm component, calls POST /api/upload
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ImageCropper from '../components/ImageCropper';
+import { useAuth } from '../hooks/useAuth';
+import api from '../api';
 
 function Upload() {
+    const { currentUser } = useAuth();
+
     const [imageSrc, setImageSrc] = useState(null);
     const [croppedImage, setCroppedImage] = useState(null);
 
     const [error, setError] = useState(null);
+
+    const [test, setTest] = useState(null);
 
     const navigate = useNavigate();
 
@@ -20,23 +26,29 @@ function Upload() {
             return;
         }
 
-        const formData = new FormData(e.target);
-        formData.append("image", croppedImage);
+        const name = document.getElementById("name").value;
+        const username = currentUser.username;
+
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('name', name);
+        formData.append('image', croppedImage, 'croppedImage.jpg');
 
         //Upload the image
         try {
-            const response = await fetch('http://localhost:5000/api/upload', {
-                method: 'POST',
-                body: formData
+            const response = await api.post('/upload', formData, {
+                responseType: 'blob'
             });
 
-            if (!response.ok) throw "Failed to upload image";
+            const blob = response.data;
+            setTest(URL.createObjectURL(blob));
 
-            navigate("/");
+            //navigate("/");
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error) {
                 setError(error.response.data.error);
             } else {
+                console.log(error);
                 setError("An error occurred during upload");
             }
         }
@@ -60,6 +72,8 @@ function Upload() {
 
                 <button type="submit">Upload Food</button>
             </form>
+
+            {test && <img src={test} />}
         </div>
     )
 }

@@ -7,6 +7,7 @@ import { dbConnection } from './config/mongoConnection.js';
 import authRoutes from './routes/auth.js';
 import gameRoutes from './routes/game.js';
 import leaderboardRoutes from './routes/leaderboard.js';
+import uploadRoutes from './routes/upload.js';
 import cors from 'cors';
 import { initVoteSocket } from './sockets/voteSocket.js';
 
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/game', gameRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Sockets
 initVoteSocket(io);
