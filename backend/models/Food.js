@@ -25,20 +25,22 @@ const exportedMethods = {
     },
 
     async createFood(name, imageUrl, uploadedBy) {
-        name = validation.checkString(name, 'Name');
+        name = validation.checkString(name, 'Name', 1, 30);
         imageUrl = validation.checkString(imageUrl, 'Image URL');
-        uploadedBy = validation.checkString(uploadedBy, 'Uploaded By');
+        uploadedBy = validation.checkString(uploadedBy, 'ID');
 
-        if (name.length < 2) throw 'Name must be at least 2 characters';
-        if (name.length > 50) throw 'Name must be under 50 characters';
-        if (!imageUrl.startsWith('/uploads/') && !imageUrl.startsWith('http'))
+        if (!imageUrl.startsWith('uploads\\') && !imageUrl.startsWith('http'))
             throw 'Invalid image URL';
         if (!ObjectId.isValid(uploadedBy)) throw 'Invalid user ID';
+
+        //Convert the image to its binaries to store in Mongo
+        const fs = await import('fs/promises');
+        const imageBuffer = await fs.readFile(imageUrl);
 
         const foodCollection = await foods();
         const newFood = {
             name,
-            imageUrl,
+            image: imageBuffer,
             uploadedBy,
             status: 'pending',
             totalVotes: 0,

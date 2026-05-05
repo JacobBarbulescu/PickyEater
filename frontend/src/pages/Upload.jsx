@@ -25,27 +25,23 @@ function Upload() {
         }
 
         const name = document.getElementById("name").value;
-        const username = currentUser.username;
+        const id = currentUser.id.toString();
 
         const formData = new FormData();
-        formData.append('username', username);
+        formData.append('id', id);
         formData.append('name', name);
         formData.append('image', croppedImage, 'croppedImage.jpg');
 
         //Upload the image
         try {
-            const response = await api.post('/upload', formData, {
-                responseType: 'blob'
-            });
-
-
+            await api.post('/upload', formData);
 
             navigate("/");
         } catch (error) {
+            console.log(error);
             if (error.response && error.response.data && error.response.data.error) {
                 setError(error.response.data.error);
             } else {
-                console.log(error);
                 setError("An error occurred during upload");
             }
         }
