@@ -18,4 +18,7 @@ export const submitGuess = (userId, guessedFoodId, food1Id, food2Id, currentScor
     api.post('/game/guess', { userId, guessedFoodId, food1Id, food2Id, currentScore });
 export const getBestScore = (userId) => api.get(`/game/bestscore/${userId}`);
 
+// Profile
+export const getProfile = () => api.get('/auth/me');
+
 export default api;

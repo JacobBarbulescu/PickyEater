@@ -42,7 +42,7 @@ function Signup() {
                 </div>
                 <button type="submit">Sign Up</button>
             </form>
-            <p>Already have an account? Click here<Link to="/login">Login</Link></p>
+            <p>Already have an account? <Link to="/login">Login</Link></p>
         </div>
     )
 }
