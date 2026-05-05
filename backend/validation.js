@@ -1,10 +1,14 @@
 const exportedMethods = {
 
-  checkString(val, varName) {
+  checkString(val, varName, min = -1, max = -1) {
     if (!val) throw `${varName} is required`;
     if (typeof val !== 'string') throw `${varName} must be a string`;
     val = val.trim();
     if (val.length === 0) throw `${varName} cannot be empty`;
+
+    if ((min !== -1) && (val.length < min)) throw `${varName} must be at least ${min} characters`;
+    if ((max !== -1) && (val.length > max)) throw `${varName} must be at most ${max} characters`;
+
     return val;
   },
 
