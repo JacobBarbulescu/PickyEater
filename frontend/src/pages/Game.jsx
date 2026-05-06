@@ -15,7 +15,8 @@ const Game = () => {
     const [food2, setFood2] = useState(null);
     const [result, setResult] = useState(null);
     const [score, setScore] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true);
+    const [roundLoading, setRoundLoading] = useState(false);
     const [error, setError] = useState(null);
     const [guessedFoodId, setGuessedFoodId] = useState(null);
     const [timeLeft, setTimeLeft] = useState(COUNTDOWN);
@@ -32,6 +33,7 @@ const Game = () => {
     const scoreRef = useRef(0);
     const location = useLocation();
     const [bestScore, setBestScore] = useState(0);
+    const [sessionBestScore, setSessionBestScore] = useState(0);
 
 
     // keep scoreRef in sync so timer can access latest score
@@ -76,7 +78,7 @@ const Game = () => {
 
     // Gets 2 random foods for the round
     const fetchRound = async () => {
-        setLoading(true);
+        setRoundLoading(true);
         setResult(null);
         setGuessedFoodId(null);
         setCorrectFoodId(null);
@@ -93,7 +95,8 @@ const Game = () => {
         } catch (e) {
             setError('Could not load foods. Try again later.');
         } finally {
-            setLoading(false);
+            setRoundLoading(false);
+            setInitialLoading(false);
         }
     };
 
@@ -129,6 +132,7 @@ const Game = () => {
             try {
                 const res = await getBestScore(currentUser.id);
                 setBestScore(res.data.bestScore);
+                setSessionBestScore(res.data.bestScore);
             } catch (e) {
                 console.error('Could not fetch best score');
             }
@@ -169,6 +173,11 @@ const Game = () => {
                 setShowPlusOne(true);
                 setTimeout(() => setShowPlusOne(false), 800);
                 setTimeout(() => setFlash(''), 600);
+                
+                // Automatically go to next round
+                setTimeout(() => {
+                    fetchRound();
+                }, 900);
 
             // Incorrect
             } else {
@@ -202,23 +211,9 @@ const Game = () => {
     };
 
     if (!currentUser) return <div>Please log in to play.</div>;
-    if (loading) return <div>Loading...</div>;
+    if (initialLoading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
-
-    // Game over screen
-    if (gameOver && !flash) {
-        return (
-            <GameOver
-                timedOut={timedOut}
-                finalScore={finalScore}
-                onPlayAgain={startNewGame}
-                food1={food1}
-                food2={food2}
-                getBorderStyle={getBorderStyle}
-                getIsCorrect={getIsCorrect}
-            />
-        );
-    }
+    const isNewHighScore = finalScore > sessionBestScore;
 
     return (
         <div className={`game-page ${flash}`}>
@@ -239,16 +234,11 @@ const Game = () => {
                 </div>
             )}
 
-            {result && result.correct && (
-                <div>
-                    <button onClick={fetchRound}>Next Round</button>
-                </div>
-            )}
-
+            {showPlusOne && <div className="plus-one">+1</div>}
+            {showWrong && <div className="wrong-overlay">X</div>}
+            
             <div className="food-cards-wrapper">
-                {showPlusOne && <div className="plus-one">+1</div>}
-                {showWrong && <div className="wrong-overlay">X</div>}
-                <div className="food-cards">
+                <div className={`food-cards ${roundLoading ? 'fading' : ''}`}>
                     {[food1, food2].map((food) => (
                         <FoodCard
                             key={food._id}
@@ -262,6 +252,23 @@ const Game = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Game Over Card */}
+            {gameOver && !flash && (
+                <div className="game-over-overlay">
+                    <GameOver
+                        timedOut={timedOut}
+                        finalScore={finalScore}
+                        bestScore={bestScore}
+                        isNewHighScore={isNewHighScore}
+                        onPlayAgain={startNewGame}
+                        food1={food1}
+                        food2={food2}
+                        getBorderStyle={getBorderStyle}
+                        getIsCorrect={getIsCorrect}
+                    />
+                </div>
+            )}
         </div>
     );
 };
