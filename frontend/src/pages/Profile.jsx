@@ -1,16 +1,19 @@
-// Jason — logged-in user's stats and account info
+// Jason — logged-in user's stats, bio, and account info
 import { useState, useEffect } from 'react';
-import { getProfile } from '../api/index.js';
+import { getProfile, updateBio } from '../api/index.js';
 
 const Profile = () => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
+    const [editingBio, setEditingBio] = useState(false);
+    const [bioInput, setBioInput] = useState('');
 
     useEffect(() => {
         async function load() {
             try {
                 const res = await getProfile();
                 setUser(res.data);
+                setBioInput(res.data.bio || '');
             } catch (e) {
                 setError('Could not load profile.');
             }
@@ -18,13 +21,48 @@ const Profile = () => {
         load();
     }, []);
 
+    async function handleSaveBio() {
+        try {
+            await updateBio(bioInput);
+            setUser(prev => ({ ...prev, bio: bioInput }));
+            setEditingBio(false);
+        } catch (e) {
+            setError('Could not update bio.');
+        }
+    }
+
     if (error) return <div>{error}</div>;
     if (!user) return <div>Loading...</div>;
 
     return (
         <div>
-            <h1>Profile</h1>
-            <p><strong>Username:</strong> {user.username}</p>
+            <h1>{user.username}'s Profile</h1>
+
+            <div className="bio-section">
+                {editingBio ? (
+                    <div>
+                        <textarea
+                            value={bioInput}
+                            onChange={e => setBioInput(e.target.value)}
+                            maxLength={100}
+                            rows={5}
+                            className="bio-textarea"
+                        />
+                        <p>{bioInput.length}/100</p>
+                        <div>
+                            <button onClick={handleSaveBio}>Save</button>
+                            <button onClick={() => setEditingBio(false)}>Cancel</button>
+                        </div>
+                    </div>
+                ) : (
+                    <div>
+                        <p className="bio-text">{user.bio || 'No bio yet.'}</p>
+                        <button onClick={() => setEditingBio(true)}>Edit Bio</button>
+                    </div>
+                )}
+            </div>
+
+            <h2>Stats</h2>
             <p><strong>Email:</strong> {user.email}</p>
             <p><strong>Total Score:</strong> {user.score}</p>
             <p><strong>Best Score:</strong> {user.bestScore}</p>

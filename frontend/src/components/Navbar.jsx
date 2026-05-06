@@ -17,7 +17,8 @@ function Navbar() {
             <Link to="/game">Game</Link>
             <Link to="/vote">Vote</Link>
             <Link to="/leaderboard">Leaderboard</Link>
-            <Link to="/search">Search</Link>
+            <Link to="/search">Food Search</Link>
+            <Link to="/users">User Search</Link>
             {currentUser ? (
                 <span className="navbar-right">
                     <Link to="/profile">Profile</Link>

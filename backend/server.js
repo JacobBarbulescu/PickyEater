@@ -12,6 +12,7 @@ import cors from 'cors';
 import { initVoteSocket } from './sockets/voteSocket.js';
 import adminRoutes from './routes/admin.js';
 import voteRoutes from './routes/votes.js';
+import userRoutes from './routes/users.js';
 
 //more imports here
 
@@ -33,6 +34,7 @@ app.use('/api/game', gameRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/votes', voteRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/users', userRoutes);
 
 // Sockets
 initVoteSocket(io);

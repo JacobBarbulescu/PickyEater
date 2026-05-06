@@ -51,6 +51,11 @@ function AdminDashboard() {
                 <div className="admin-list">
                     {pendingFoods.map((food) => (
                         <div key={food._id} className="admin-item">
+                            <img
+                                src={food.image ? `http://localhost:5000/api/admin/image/${food._id}` : food.imageUrl}
+                                alt={food.name}
+                                className="admin-food-image"
+                            />
                             <h2 className="admin-food-name">{food.name}</h2>
                             <div>
                                 <button onClick={() => approveFood(food._id)}>Approve</button>

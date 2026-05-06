@@ -20,5 +20,10 @@ export const getBestScore = (userId) => api.get(`/game/bestscore/${userId}`);
 
 // Profile
 export const getProfile = () => api.get('/auth/me');
+export const updateBio = (bio) => api.patch('/auth/bio', { bio });
+
+// Users
+export const searchUsers = (q) => api.get(`/users/search?q=${q}`);
+export const getUserProfile = (username) => api.get(`/users/${username}`);
 
 export default api;

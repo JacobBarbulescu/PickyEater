@@ -51,6 +51,29 @@ button:hover, .btn:hover {
   font-weight: bold;
 }
 
+.bio-section {
+  margin-bottom: 1.5rem;
+}
+
+.bio-text {
+  margin: 1rem;
+}
+
+.bio-textarea {
+  width: 20rem;
+  font-size: 1rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  color: #222222;
+}
+
+.admin-food-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
 .home-links {
   display: flex;
   gap: 1rem;
