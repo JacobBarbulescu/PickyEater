@@ -70,7 +70,7 @@ function VoteGame() {
         setError(null);
 
         socket.emit('createVote', {
-            userId: currentUser._id,
+            userId: currentUser.id,
             winFoodId: pickedFood._id,
             lossFoodId: loseFood._id
         });
