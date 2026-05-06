@@ -23,7 +23,7 @@ export const getProfile = () => api.get('/auth/me');
 export const updateBio = (bio) => api.patch('/auth/bio', { bio });
 
 // Users
-export const searchUsers = (q) => api.get(`/users/search?q=${q}`);
+export const searchUsers = (q) => api.get(`/users/search?search=${q}`);
 export const getUserProfile = (username) => api.get(`/users/${username}`);
 
 export default api;
