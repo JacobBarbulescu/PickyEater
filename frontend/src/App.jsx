@@ -26,7 +26,7 @@ function App() {
                     <Route path="/vote" element={<ProtectedRoute><Vote /></ProtectedRoute>} />
                     <Route path="/leaderboard" element={<Leaderboard />} />
                     <Route path="/search" element={<Search />} />
-                    <Route path="/upload" element={<ProtectedRoute adminOnly={true}><Upload /></ProtectedRoute>} />
+                    <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
                     <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                     <Route path="/admin" element={<ProtectedRoute adminOnly={true}><Admin /></ProtectedRoute>} />
                 </Routes>
