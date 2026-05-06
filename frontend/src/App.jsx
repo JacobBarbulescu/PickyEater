@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -16,9 +16,25 @@ import UserProfile from './pages/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+    const navRef = useRef(null);
+
+    useEffect(() => {
+        const updateNavHeight = () => {
+            if (navRef.current) {
+                document.documentElement.style.setProperty(
+                    '--navbar-height',
+                    `${navRef.current.offsetHeight}px`
+                );
+            }
+        };
+        updateNavHeight();
+        window.addEventListener('resize', updateNavHeight);
+        return () => window.removeEventListener('resize', updateNavHeight);
+    }, []);
+
     return (
         <div>
-            <Navbar />
+            <Navbar ref={navRef} />
             <div className="page-content">
                 <Routes>
                     <Route path="/" element={<Home />} />

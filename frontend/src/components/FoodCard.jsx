@@ -7,8 +7,14 @@ const FoodCard = ({ food, onClick, borderStyle, showVotes, isCorrect, isTie }) =
     return (
         <div onClick={onClick} className={borderStyle}>
             <div className="food-card-image-wrapper">
-                <img src={food.imageUrl} alt={food.name} />
-                 {showVotes && (
+                <img 
+                    src={food.imageUrl} 
+                    alt={food.name}
+                    onError={(e) => {
+                        e.target.src = 'https://placehold.co/300x200?text=Unable+to+Load+Image';
+                    }}
+                />
+                {showVotes && (
                     <div className={`win-banner ${isTie ? 'banner-tie' : isCorrect ? 'banner-correct' : 'banner-wrong'}`}>
                         {winPercent}% Win Rate
                     </div>
