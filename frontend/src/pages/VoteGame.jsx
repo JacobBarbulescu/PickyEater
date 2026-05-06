@@ -98,7 +98,7 @@ function VoteGame() {
     return (
         <div>
             <h1>Would You Rather?</h1>
-            <p>Select a prefered food</p>
+            <p>Select a preferred food</p>
 
             {submitting && <p>Submitting vote...</p>}
 
