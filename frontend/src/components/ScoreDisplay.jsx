@@ -2,16 +2,6 @@
 import { useEffect, useState } from 'react';
 
 const ScoreDisplay = ({ score, result, timeLeft, bestScore }) => {
-    const [showDelta, setShowDelta] = useState(false);
-
-    useEffect(() => {
-        if (result) {
-            setShowDelta(true);
-            const timer = setTimeout(() => setShowDelta(false), 1500);
-            return () => clearTimeout(timer);
-        }
-    }, [result]);
-
     return (
         <div>
             <p>Score: {score}</p>
@@ -19,7 +9,9 @@ const ScoreDisplay = ({ score, result, timeLeft, bestScore }) => {
             {!result && <p>Time Left: {timeLeft}</p>}
             {result && (
                 <div>
-                    {!result.tie && <p>{result.correct ? 'Correct!' : 'Wrong!'}</p>}
+                    {result && result.tie && <p>It's a Tie! No points awarded.</p>}
+                    {result && !result.tie && !result.correct && <p>Wrong!</p>}
+                    {result && !result.tie && result.correct && <p>Correct!</p>}
                 </div>
             )}
         </div>

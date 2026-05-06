@@ -158,6 +158,10 @@ const Game = () => {
 
             // Tie
             if (res.data.tie) {
+                setCorrectFoodId(null);
+                setFlash('flash-correct');
+                setTimeout(() => setFlash(''), 600);
+                setTimeout(() => fetchRound(), 1700);
                 return;
             }
 
@@ -227,16 +231,9 @@ const Game = () => {
                 bestScore={bestScore}
             />
 
-            {result && result.tie && (
-                <div>
-                    <p>It's a Tie! No points awarded.</p>
-                    <button onClick={fetchRound}>Next Round</button>
-                </div>
-            )}
-
             {showPlusOne && <div className="plus-one">+1</div>}
             {showWrong && <div className="wrong-overlay">X</div>}
-            
+
             <div className="food-cards-wrapper">
                 <div className={`food-cards ${roundLoading ? 'fading' : ''}`}>
                     {[food1, food2].map((food) => (
