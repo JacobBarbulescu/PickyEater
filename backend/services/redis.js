@@ -3,7 +3,7 @@ import Redis from 'ioredis';
 
 let client = null;
 
-export async function getRedisClient() {
+async function getRedisClient() {
     //If the redis client has not been initialized, initialize it
     if (!client) {
         client = new Redis(process.env.REDIS_URL);
@@ -11,3 +11,5 @@ export async function getRedisClient() {
     }
     return client;
 }
+
+export default getRedisClient;
