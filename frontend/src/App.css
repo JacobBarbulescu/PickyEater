@@ -374,3 +374,12 @@ input {
     from { opacity: 0; transform: translateY(-10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
+
+.food-cards > div {
+    border: 4px solid transparent;
+    box-sizing: border-box;
+}
+
+.guessed {
+    border: 4px solid yellow !important;
+}
