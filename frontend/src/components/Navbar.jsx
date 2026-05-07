@@ -18,6 +18,7 @@ const Navbar = forwardRef((props, ref) => {
             <Link to="/game">Game</Link>
             <Link to="/vote">Vote</Link>
             <Link to="/leaderboard">Leaderboard</Link>
+            <Link to="/upload">Upload</Link>
             <Link to="/search">Food Search</Link>
             <Link to="/users">User Search</Link>
             {currentUser ? (
