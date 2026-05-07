@@ -8,7 +8,8 @@ services:
       - "27017:27017"
 
   redis:
-    image: redis
+    image: redis/redis-stack
     container_name: picky_redis
     ports:
       - "6379:6379"
+      - "8001:8001"

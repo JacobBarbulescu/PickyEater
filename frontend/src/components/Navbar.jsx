@@ -26,7 +26,7 @@ const Navbar = forwardRef((props, ref) => {
                     {currentUser.role === 'admin' && <Link to="/admin">Admin</Link>}
                     <button onClick={handleLogout}>Logout</button>
                 </span>
-            ): (
+            ) : (
                 <Link to="/login">Login</Link>
             )}
         </nav>
@@ -34,4 +34,3 @@ const Navbar = forwardRef((props, ref) => {
 })
 
 export default Navbar;
-        

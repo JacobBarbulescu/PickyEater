@@ -2,7 +2,7 @@
 import express from 'express';
 import { ObjectId } from 'mongodb';
 import { foods } from '../config/mongoCollections.js';
-import { authMiddleware } from '../middleware/auth.js';
+import authMiddleware from '../middleware/auth.js';
 import { adminOnly } from '../middleware/adminOnly.js';
 
 const router = express.Router();
@@ -15,7 +15,7 @@ router.get('/pending', authMiddleware, adminOnly, async (req, res) => {
         return res.json(pendingFoods);
     }
     catch (e) {
-        return res.status(500).json({error: e})
+        return res.status(500).json({ error: e })
     }
 });
 
@@ -27,7 +27,7 @@ router.patch('/approve/:id', authMiddleware, adminOnly, async (req, res) => {
         return res.json({ message: 'Food approved' });
     }
     catch (e) {
-        return res.status(500).json({error: e})
+        return res.status(500).json({ error: e })
     }
 
 });
@@ -40,7 +40,7 @@ router.delete('/reject/:id', authMiddleware, adminOnly, async (req, res) => {
         return res.json({ message: 'Food rejected and deleted' });
     }
     catch (e) {
-        return res.status(500).json({error: e})
+        return res.status(500).json({ error: e })
     }
 });
 
