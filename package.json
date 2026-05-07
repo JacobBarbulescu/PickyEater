@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "dev": "concurrently \"docker compose up -d\" \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "install:all": "npm install --prefix backend && npm install --prefix frontend"
   },
   "devDependencies": {
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "imagemagick": "^0.1.3",
-    "react-easy-crop": "^5.5.7"
+    "react-easy-crop": "^5.5.7",
+    "redis": "^5.12.1"
   }
 }

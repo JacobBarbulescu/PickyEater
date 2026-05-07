@@ -53,10 +53,22 @@ router.get('/me', authMiddleware, async (req, res) => {
             score: user.score,
             bestScore: user.bestScore,
             numVotes: user.numVotes,
-            createdAt: user.createdAt
+            createdAt: user.createdAt,
+            bio: user.bio || ''
         });
     } catch (e) {
         return res.status(404).json({ error: 'User not found' });
+    }
+});
+
+//PATCH api/auth/bio
+router.patch('/bio', authMiddleware, async (req, res) => {
+    try {
+        const { bio } = req.body;
+        await userData.updateBio(req.user.userId, bio);
+        return res.json({ message: 'Bio updated' });
+    } catch (e) {
+        return res.status(400).json({ error: e });
     }
 });
 

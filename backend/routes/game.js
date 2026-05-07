@@ -4,6 +4,8 @@ import foodData from '../models/Food.js';
 import { users } from '../config/mongoCollections.js';
 import { ObjectId } from 'mongodb';
 import userData from '../models/User.js';
+import getRedisClient from '../services/redis.js';
+import * as cache from '../middleware/redis.js';
 
 const router = express.Router();
 
@@ -11,6 +13,12 @@ const router = express.Router();
 router.get('/pair', async (req, res) => {
     try {
         const twoFoods = await foodData.getTwoRandomFoods();
+
+        //Update caches
+        let redisClient = await getRedisClient();
+        await redisClient.json.set(`food:${twoFoods[0]._id}`, '$', twoFoods[0]);
+        await redisClient.json.set(`food:${twoFoods[1]._id}`, '$', twoFoods[1]);
+
         return res.json(twoFoods);
     } catch (e) {
         return res.status(500).json({ error: e });
@@ -18,7 +26,7 @@ router.get('/pair', async (req, res) => {
 });
 
 // Body: { userId, guessedFoodId, food1Id, food2Id }
-router.post('/guess', async (req, res) => {
+router.post('/guess', cache.guess, async (req, res) => {
     const { userId, guessedFoodId, food1Id, food2Id, currentScore } = req.body;
     if (!userId || !guessedFoodId || !food1Id || !food2Id) {
         return res.status(400).json({ error: 'Missing required fields' });
@@ -30,11 +38,6 @@ router.post('/guess', async (req, res) => {
         const food1WinRate = food1.wins / (food1.totalVotes + 1);
         const food2WinRate = food2.wins / (food2.totalVotes + 1);
 
-        // Tie logic
-        if (food1WinRate === food2WinRate) {
-            return res.json({ tie: true, food1, food2 });
-        }
-
         const correctFoodId = food1WinRate >= food2WinRate
             ? food1._id.toString()
             : food2._id.toString();
@@ -43,9 +46,21 @@ router.post('/guess', async (req, res) => {
 
         // Increment total votes of user
         await userData.incrementNumVotes(userId);
+        if (isCorrect) await userData.updateScoreAndBest(userId, currentScore);
 
-        if (isCorrect) {
-            await userData.updateScoreAndBest(userId, currentScore);
+        //Update caches
+        let redisClient = await getRedisClient();
+        await redisClient.json.set(`food:${food1._id}`, '$', food1);
+        await redisClient.json.set(`food:${food2._id}`, '$', food2);
+
+        let user = await userData.getUserById(userId);
+        delete user.password;
+        delete user.email;
+        await redisClient.json.set(`user:${userId}`, '$', user);
+
+        // Tie logic
+        if (food1WinRate === food2WinRate) {
+            return res.json({ tie: true, food1, food2 });
         }
 
         return res.json({
@@ -59,10 +74,17 @@ router.post('/guess', async (req, res) => {
     }
 });
 
-router.get('/bestscore/:userId', async (req, res) => {
+router.get('/bestscore/:userId', cache.getBestScore, async (req, res) => {
     try {
         const userId = req.params.userId;
         const user = await userData.getUserById(userId);
+
+        //Update caches
+        let redisClient = await getRedisClient();
+        delete user.password;
+        delete user.email;
+        await redisClient.json.set(`user:${userId}`, '$', user);
+
         return res.json({ bestScore: user.bestScore || 0 });
     } catch (e) {
         return res.status(500).json({ error: e });

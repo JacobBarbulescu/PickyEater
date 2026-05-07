@@ -1,9 +1,13 @@
 .navbar {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  align-items: center;
-  border-bottom: 1px solid #ccc;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background-color: #f5f5f5;
 }
 
 .navbar-right {
@@ -49,6 +53,29 @@ button:hover, .btn:hover {
 .admin-food-name {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.bio-section {
+  margin-bottom: 1.5rem;
+}
+
+.bio-text {
+  margin: 1rem;
+}
+
+.bio-textarea {
+  width: 20rem;
+  font-size: 1rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  color: #222222;
+}
+
+.admin-food-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 .home-links {
@@ -134,11 +161,6 @@ input {
   flex-direction: column;
 }
 
-.game-page {
-  flex: 1;
-  min-height: calc(100vh - 55.86px);
-}
-
 .food-cards {
   display: flex;
   flex-direction: row;
@@ -153,7 +175,7 @@ input {
 }
 
 .plus-one {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -172,7 +194,7 @@ input {
 }
 
 .wrong-overlay {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -190,6 +212,9 @@ input {
 
 .food-card-image-wrapper img {
     display: block;
+    width: 375px;
+    height: 250px;
+    object-fit: cover;
 }
 
 .win-banner {
@@ -229,4 +254,135 @@ input {
 
 .wrong-vote{
   border: solid red  4px;
+  
+.game-over-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+.fading {
+    opacity: 0.3;
+    transition: opacity 0.15s ease;
+}
+
+.game-page {
+    flex: 1;
+    min-height: calc(100vh - var(--navbar-height));
+}
+
+.game-over-overlay {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1125px;
+    max-width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.score-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin: 1rem auto;
+}
+
+.score-section {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.score-value {
+    font-size: 3rem;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.score-value.best {
+    color: #1a73e8;
+}
+
+.score-flash {
+    animation: scorePop 0.6s ease;
+}
+
+@keyframes scorePop {
+    0%   { transform: scale(1); color: black; }
+    40%  { transform: scale(1.4); color: green; }
+    100% { transform: scale(1); color: black; }
+}
+
+.score-label {
+    font-size: 0.85rem;
+    color: gray;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
+.timer-section {
+    text-align: center;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.timer-value {
+    font-size: 3rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.time-ok {
+    color: green;
+}
+
+.time-warning {
+    color: orange;
+}
+
+.time-critical {
+    color: red;
+    animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to   { transform: scale(1.1); }
+}
+
+.result-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    animation: fadeIn 0.3s ease;
+}
+
+.result-correct { color: green; }
+.result-wrong   { color: red; }
+.result-tie     { color: #1a73e8; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.food-cards > div {
+    border: 4px solid transparent;
+    box-sizing: border-box;
+}
+
+.guessed {
+    border: 4px solid yellow !important;
 }

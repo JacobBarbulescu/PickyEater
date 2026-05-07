@@ -82,6 +82,17 @@ const exportedMethods = {
             { $inc: { numVotes: 1 } }
         );
     },
+
+    async updateBio(userId, bio) {
+        if (!ObjectId.isValid(userId)) throw 'Invalid user ID';
+        if (typeof bio !== 'string') throw 'Bio must be a string';
+        bio = bio.trim().slice(0, 200);
+        const userCollection = await users();
+        await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $set: { bio } }
+        );
+    },
 };
 
 export default exportedMethods;
