@@ -2,6 +2,7 @@
 import express from 'express';
 import { users } from '../config/mongoCollections.js';
 import getRedisClient from '../services/redis.js';
+import * as cache from '../middleware/redis.js';
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ router.get('/search', async (req, res) => {
 });
 
 // GET /api/users/:username
-router.get('/:username', async (req, res) => {
+router.get('/:username', cache.getUserProfile, async (req, res) => {
     try {
         const userCollection = await users();
         const user = await userCollection.findOne({ username: req.params.username });
