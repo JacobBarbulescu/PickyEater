@@ -81,3 +81,26 @@ export async function guess(req, res, next) {
         return next();
     }
 }
+
+export async function getUserProfile(req, res, next) {
+    const userId = req.params.userId;
+    const userKey = `user:${userId}`;
+
+    try {
+        const redisClient = await getRedisClient();
+
+        //If the user is cached, use them
+        if (await redisClient.exists(userKey)) {
+            const userData = await redisClient.json.get(userKey);
+            return res.status(200).json(userData);
+        }
+        //Otherwise, move on
+        else {
+            next();
+        }
+    } catch (e) {
+        //If redis error, simply move on
+        console.error(e);
+        next();
+    }
+}

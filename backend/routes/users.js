@@ -1,6 +1,7 @@
 // Jason — GET /api/users/search?q=, GET /api/users/:username
 import express from 'express';
 import { users } from '../config/mongoCollections.js';
+import getRedisClient from '../services/redis.js';
 
 const router = express.Router();
 
@@ -34,7 +35,8 @@ router.get('/:username', async (req, res) => {
         const userCollection = await users();
         const user = await userCollection.findOne({ username: req.params.username });
         if (!user) return res.status(404).json({ error: 'User not found' });
-        return res.json({
+
+        const formattedUser = {
             _id: user._id,
             username: user.username,
             bio: user.bio,
@@ -42,7 +44,13 @@ router.get('/:username', async (req, res) => {
             bestScore: user.bestScore,
             numVotes: user.numVotes,
             createdAt: user.createdAt
-        });
+        };
+
+        //Cache the user
+        let redisClient = await getRedisClient();
+        await redisClient.json.set(`user:${user._id}`, '$', formattedUser);
+
+        return res.status(200).json(formattedUser);
     } catch (e) {
         return res.status(500).json({ error: e });
     }
