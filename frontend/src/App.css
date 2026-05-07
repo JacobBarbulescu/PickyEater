@@ -226,3 +226,7 @@ input {
 .banner-tie {
     color: white;
 }
+
+.wrong-vote{
+  border: solid red  4px;
+}

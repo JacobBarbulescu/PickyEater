@@ -1,11 +1,11 @@
 // Jackson — clickable food card for the would-you-rather voting UI
 import React from 'react';
 
-export function VoteCard({ food, onVote, disabled }) {
+export function VoteCard({ food, onVote, disabled, cardStyle}) {
     return (
         <button
             type='button'
-            className='voteCard'
+            className= {`voteCard ${cardStyle}`}
             onClick={() => onVote(food)}
             disabled={disabled}
         >   
