@@ -83,19 +83,22 @@ export async function guess(req, res, next) {
 }
 
 export async function getUserProfile(req, res, next) {
-    const userId = req.params.userId;
+    const userId = req.params.id;
     const userKey = `user:${userId}`;
+
 
     try {
         const redisClient = await getRedisClient();
 
         //If the user is cached, use them
         if (await redisClient.exists(userKey)) {
+            console.log("Cache hit");
             const userData = await redisClient.json.get(userKey);
             return res.status(200).json(userData);
         }
         //Otherwise, move on
         else {
+            console.log("Cache miss");
             next();
         }
     } catch (e) {

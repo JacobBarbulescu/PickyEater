@@ -3,6 +3,7 @@ import express from 'express';
 import { users } from '../config/mongoCollections.js';
 import getRedisClient from '../services/redis.js';
 import * as cache from '../middleware/redis.js';
+import userFunctions from '../models/User.js';
 
 const router = express.Router();
 
@@ -30,15 +31,13 @@ router.get('/search', async (req, res) => {
     }
 });
 
-// GET /api/users/:username
-router.get('/:username', cache.getUserProfile, async (req, res) => {
+// GET /api/users/:id
+router.get('/:id', cache.getUserProfile, async (req, res) => {
     try {
-        const userCollection = await users();
-        const user = await userCollection.findOne({ username: req.params.username });
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        const user = await userFunctions.getUserById(req.params.id);
 
         const formattedUser = {
-            _id: user._id,
+            _id: user._id.toString(),   // ObjectId must be a string for JSON serialization
             username: user.username,
             bio: user.bio,
             score: user.score,
@@ -49,11 +48,12 @@ router.get('/:username', cache.getUserProfile, async (req, res) => {
 
         //Cache the user
         let redisClient = await getRedisClient();
-        await redisClient.json.set(`user:${user._id}`, '$', formattedUser);
+        const cachedUser = await redisClient.json.set(`user:${user._id}`, '$', formattedUser);
+        console.log(cachedUser);
 
         return res.status(200).json(formattedUser);
     } catch (e) {
-        return res.status(500).json({ error: e });
+        return res.status(500).json({ error: e.message || e.toString() });
     }
 });
 

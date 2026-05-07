@@ -24,6 +24,6 @@ export const updateBio = (bio) => api.patch('/auth/bio', { bio });
 
 // Users
 export const searchUsers = (q) => api.get(`/users/search?search=${q}`);
-export const getUserProfile = (username) => api.get(`/users/${username}`);
+export const getUserProfile = (id) => api.get(`/users/${id}`);
 
 export default api;

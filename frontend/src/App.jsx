@@ -47,7 +47,7 @@ function App() {
                     <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
                     <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                     <Route path="/users" element={<UserSearch />} />
-                    <Route path="/users/:username" element={<UserProfile />} />
+                    <Route path="/users/:id" element={<UserProfile />} />
                     <Route path="/admin" element={<ProtectedRoute adminOnly={true}><Admin /></ProtectedRoute>} />
                 </Routes>
             </div>

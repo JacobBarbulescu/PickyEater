@@ -39,7 +39,7 @@ const UserSearch = () => {
                 {results.map(user => (
                     <div key={user._id} className="admin-item">
                         <span>{user.username}</span>
-                        <Link to={`/users/${user.username}`}>View Profile</Link>
+                        <Link to={`/users/${user._id}`}>View Profile</Link>
                     </div>
                 ))}
             </div>

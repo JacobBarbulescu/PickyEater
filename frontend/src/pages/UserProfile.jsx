@@ -4,21 +4,21 @@ import { useParams } from 'react-router-dom';
 import { getUserProfile } from '../api/index.js';
 
 const UserProfile = () => {
-    const { username } = useParams();
+    const { id } = useParams();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         async function load() {
             try {
-                const res = await getUserProfile(username);
+                const res = await getUserProfile(id);
                 setUser(res.data);
             } catch (e) {
                 setError('User not found.');
             }
         }
         load();
-    }, [username]);
+    }, [id]);
 
     if (error) return <div>{error}</div>;
     if (!user) return <div>Loading...</div>;
