@@ -40,7 +40,6 @@ function ImageCropper({ image, setCroppedImage }) {
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
 
-    //When we update the image's crop, calculate the cropped image
     const onCropComplete = useCallback(async (_, croppedAreaPixels) => {
         if (image) {
             const croppedBlob = await getCroppedImage(image, croppedAreaPixels);
@@ -48,19 +47,21 @@ function ImageCropper({ image, setCroppedImage }) {
         }
     }, [image]);
 
+    if (!image) return null;
+
     return (
         <div style={{ position: "relative", width: "100%", height: 400 }}>
             <Cropper
                 image={image}
                 crop={crop}
                 zoom={zoom}
-                aspect={1} // square crop
+                aspect={1}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={onCropComplete}
             />
         </div>
-    )
+    );
 }
 
 export default ImageCropper;
