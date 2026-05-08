@@ -1,11 +1,11 @@
-version: '3.8'
-
 services:
   mongo:
     image: mongo
     container_name: picky_mongo
     ports:
       - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
 
   redis:
     image: redis/redis-stack
@@ -13,3 +13,20 @@ services:
     ports:
       - "6379:6379"
       - "8001:8001"
+
+  backend:
+    build: ./backend
+    container_name: picky_backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - MONGODB_URL=mongodb://mongo:27017/
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+
+volumes:
+  mongo_data:

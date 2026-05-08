@@ -1,22 +1,37 @@
-# 1. Install root dev dependencies
+### 0. Need to have already
+Docker (currently running)
+Node.js
+### 1. Install dependencies
 npm install
-
-# 2. Install backend/frontend
 npm run install:all
 
-# 3: copy env file and fill in necessary components
-cp backend/.env.example backend/.env
-fill in session, mongo_uri, and redis_url (get later)
 
-# 4: After Mongo/Redis running:
+### 2. Create your .env file
+
+cp backend/.env.example backend/.env
+Open backend/.env and set JWT_SECRET=anyrandomstring
+
+
+### 3. Start the app
 npm run dev
 
-View backend on localhost:5000
-View frontend on localhost:5173
+This starts MongoDB, Redis, and the backend through Docker, and the React frontend locally.
+
+Frontend: http://localhost:5173
+Backend: http://localhost:5000
+
+### 4. Seed the database (first time only)
+In a separate terminal, from the backend folder:
+
+node userSeed.js
+node foodSeed.js
 
 
-# Extra: How to make an admin account
-Make a normal account
-Manually change role to "admin" on MongoDB.
-Log out and log back into that account so login token refreshes
-Click on "Admin" in top left corner or navigate to /admin
+## Test accounts
+Admin:
+Email - admin@gmail.com
+Password - Admin123!
+
+User (Jason):
+Email - jason@gmail.com
+Password - Jason123!

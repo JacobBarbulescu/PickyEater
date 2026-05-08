@@ -7,7 +7,7 @@ function processImage(imageSrc) {
 
         //Resizes to 800x800, compresses with JPEG, and ensures proper orientation
         execFile(
-            "magick",
+            "convert",
             [
                 imageSrc,
                 "-auto-orient",
