@@ -5,7 +5,7 @@ export function VoteCard({ food, onVote, disabled, cardStyle}) {
     return (
         <button
             type='button'
-            className= {`voteCard ${cardStyle}`}
+            className={`voteCard ${cardStyle}`}
             onClick={() => onVote(food)}
             disabled={disabled}
         >   
