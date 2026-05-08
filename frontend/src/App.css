@@ -245,7 +245,12 @@ input {
 .food-name {
     background-color: lightgray;
     text-align: center;
-    padding: 0.5rem;
+    padding: 0.25rem;
+}
+
+.food-name h2 {
+    margin: 0.25rem;
+    font-size: 1.2rem;
 }
 
 .banner-tie {
@@ -284,4 +289,102 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.score-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin: 1rem auto;
+}
+
+.score-section {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.score-value {
+    font-size: 3rem;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.score-value.best {
+    color: #1a73e8;
+}
+
+.score-flash {
+    animation: scorePop 0.6s ease;
+}
+
+@keyframes scorePop {
+    0%   { transform: scale(1); color: black; }
+    40%  { transform: scale(1.4); color: green; }
+    100% { transform: scale(1); color: black; }
+}
+
+.score-label {
+    font-size: 0.85rem;
+    color: gray;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
+.timer-section {
+    text-align: center;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.timer-value {
+    font-size: 3rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.time-ok {
+    color: green;
+}
+
+.time-warning {
+    color: orange;
+}
+
+.time-critical {
+    color: red;
+    animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to   { transform: scale(1.1); }
+}
+
+.result-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    animation: fadeIn 0.3s ease;
+}
+
+.result-correct { color: green; }
+.result-wrong   { color: red; }
+.result-tie     { color: #1a73e8; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.food-cards > div {
+    border: 4px solid transparent;
+    box-sizing: border-box;
+}
+
+.guessed {
+    border: 4px solid yellow !important;
 }
