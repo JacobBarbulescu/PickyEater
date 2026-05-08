@@ -96,7 +96,7 @@ function VoteGame() {
     function getVoteCardStyle(food){
         if (!selectedFood) return ''
         if (selectedFood === food._id) return 'guessed'
-        return 'wrong-vote'
+        return ''
     }
 
     if (loading) {
@@ -130,10 +130,19 @@ function VoteGame() {
                     Next Vote
                 </button>
                 }
-            <div className="voteCards">
-                
-                <VoteCard food={foodOne} onVote={handleVote} disabled={submitting || voteComplete} cardStyle={getVoteCardStyle(foodOne)}/>
-                <VoteCard food={foodTwo} onVote={handleVote} disabled={submitting || voteComplete} cardStyle={getVoteCardStyle(foodTwo)}/>
+            <div className="food-cards-wrapper">
+                <div className={`food-cards ${submitting ? 'fading' : ''}`}>
+                    <VoteCard 
+                        food={foodOne} 
+                        onVote={handleVote} 
+                        disabled={submitting || voteComplete} 
+                        cardStyle={getVoteCardStyle(foodOne)}/>
+                    <VoteCard 
+                        food={foodTwo} 
+                        onVote={handleVote} 
+                        disabled={submitting || voteComplete} 
+                        cardStyle={getVoteCardStyle(foodTwo)}/>
+                </div>
             </div>
         </div>
     )
