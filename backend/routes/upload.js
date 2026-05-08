@@ -35,7 +35,6 @@ router.post('/', upload.single('image'), async (req, res) => {
     } finally {
         try {
             if (image?.path) fs.unlinkSync(image.path);
-            if (formattedImage) fs.unlinkSync(formattedImage);
         } catch (err) {
             console.error('Error during cleanup:', err);
         }
