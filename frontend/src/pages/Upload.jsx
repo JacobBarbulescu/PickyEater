@@ -82,7 +82,7 @@ function Upload() {
 
             {success && (
                 <div className="success-popup">
-                    <div className="game-over-card">
+                    <div className="success-card">
                         <h1>Upload Successful!</h1>
                         <p>Your food has been submitted for review.</p>
                         <div>
