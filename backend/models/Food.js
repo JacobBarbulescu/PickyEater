@@ -29,18 +29,18 @@ const exportedMethods = {
         imageUrl = validation.checkString(imageUrl, 'Image URL');
         uploadedBy = validation.checkString(uploadedBy, 'ID');
 
-        if (!imageUrl.startsWith('uploads\\') && !imageUrl.startsWith('http'))
-            throw 'Invalid image URL';
+        // Normalize OS backslashes to forward slashes so it works as a URL path
+        imageUrl = imageUrl.replace(/\\/g, '/');
+
+        if (!imageUrl.startsWith('uploads/') && !imageUrl.startsWith('http')) throw 'Invalid image URL';
         if (!ObjectId.isValid(uploadedBy)) throw 'Invalid user ID';
 
-        //Convert the image to its binaries to store in Mongo
-        const fs = await import('fs/promises');
-        const imageBuffer = await fs.readFile(imageUrl);
+        imageUrl = `http://localhost:5000/${imageUrl}`;
 
         const foodCollection = await foods();
         const newFood = {
             name,
-            image: imageBuffer,
+            imageUrl,
             uploadedBy,
             status: 'pending',
             totalVotes: 0,
