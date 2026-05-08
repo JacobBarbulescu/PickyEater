@@ -16,10 +16,18 @@ function VoteGame() {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
+    const [selectedFood, setSelectedFood] = useState(null);
+    const [voteComplete, setVoteComplete] = useState(false);
+    const [flash, setFlash] = useState('');
+
     async function getPair(){
         try{
             setLoading(true);
             setError(null);
+            setSelectedFood(null)
+            setVoteComplete(false)
+            setFlash('')
+
             const response = await api.get('/votes/pair');
             setFoodOne(response.data[0]);
             setFoodTwo(response.data[1]);
@@ -28,6 +36,8 @@ function VoteGame() {
             setSubmitting(false);
         } catch(e){
             setError('Failed to load food pair. Please try again.');
+            setLoading(false);
+            setSubmitting(false);
         }
     }
 
@@ -39,7 +49,13 @@ function VoteGame() {
         if(!socket) return;
 
         function handleVoteCreated(){
-            getPair();
+            setSubmitting(false)
+            setVoteComplete(true)
+            setFlash('flash-correct')
+
+            setTimeout(() => {
+                setFlash('');
+            }, 600)
         }
 
         function handleVoteError(data){
@@ -57,7 +73,7 @@ function VoteGame() {
     }, [socket]);
     
     function handleVote(pickedFood){
-        if (!socket || !currentUser || !foodOne || !foodTwo || submitting) return;
+        if (!socket || !currentUser || !foodOne || !foodTwo || submitting || voteComplete) return;
 
         let loseFood 
         if (pickedFood._id === foodOne._id) {
@@ -66,6 +82,7 @@ function VoteGame() {
             loseFood = foodOne;
         }
 
+        setSelectedFood(pickedFood._id);
         setSubmitting(true);
         setError(null);
 
@@ -74,6 +91,12 @@ function VoteGame() {
             winFoodId: pickedFood._id,
             lossFoodId: loseFood._id
         });
+    }
+
+    function getVoteCardStyle(food){
+        if (!selectedFood) return ''
+        if (selectedFood === food._id) return 'guessed'
+        return ''
     }
 
     if (loading) {
@@ -96,15 +119,30 @@ function VoteGame() {
     }
 
     return (
-        <div>
+        <div className={`game-page ${flash}`}>
             <h1>Would You Rather?</h1>
             <p>Select a preferred food</p>
 
             {submitting && <p>Submitting vote...</p>}
 
-            <div className="voteCards">
-                <VoteCard food={foodOne} onVote={handleVote} disabled={submitting} />
-                <VoteCard food={foodTwo} onVote={handleVote} disabled={submitting} />
+            {voteComplete && 
+                <button type="button" onClick={getPair}>
+                    Next Vote
+                </button>
+                }
+            <div className="food-cards-wrapper">
+                <div className={`food-cards ${submitting ? 'fading' : ''}`}>
+                    <VoteCard 
+                        food={foodOne} 
+                        onVote={handleVote} 
+                        disabled={submitting || voteComplete} 
+                        cardStyle={getVoteCardStyle(foodOne)}/>
+                    <VoteCard 
+                        food={foodTwo} 
+                        onVote={handleVote} 
+                        disabled={submitting || voteComplete} 
+                        cardStyle={getVoteCardStyle(foodTwo)}/>
+                </div>
             </div>
         </div>
     )

@@ -238,10 +238,6 @@ input {
     color: #ff0000;
 }
 
-.guessed {
-    border: 4px solid yellow;
-}
-
 .food-name {
     background-color: lightgray;
     text-align: center;
@@ -422,4 +418,26 @@ input {
 .success-card p {
     color: black;
     margin: 0 0 1.5rem 0;
+}
+
+.vote-card{
+  padding:0;
+  margin: 0;
+  background-color: transparent;
+  color: inherit;
+  border: 4px solid transparent;
+  border-radius: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font: inherit;
+}
+
+.vote-card:hover {
+  background-color: transparent;
+}
+
+.vote-card:disabled {
+  color:inherit;
+  cursor:default;
+  opacity: 1;
 }
