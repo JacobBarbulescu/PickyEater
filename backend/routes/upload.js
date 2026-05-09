@@ -18,7 +18,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     let formattedImage = null;
 
     try {
-        name = validation.checkString(name, "Food name", 1, 30);
+        name = validation.checkFoodName(name);
         id = validation.checkString(id, "ID");
 
         if (!image) {

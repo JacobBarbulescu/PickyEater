@@ -1,39 +1,43 @@
 // Jason — search for users by username
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { searchUsers } from '../api/index.js';
 
 const UserSearch = () => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
-    const [searched, setSearched] = useState(false);
 
-    async function handleSearch(e) {
-        e.preventDefault();
-        if (!query.trim()) return;
-        try {
-            const res = await searchUsers(query.trim());
-            setResults(res.data);
-            setSearched(true);
-        } catch (e) {
-            console.error('Search failed');
+    useEffect(() => {
+        if (query.trim().length < 2) {
+            setResults([]);
+            return;
         }
-    }
+        const timeout = setTimeout(async () => {
+            try {
+                const res = await searchUsers(query.trim());
+                setResults(res.data);
+            } catch (e) {
+                console.error('Search failed');
+            }
+        }, 300); // wait 300ms after typing stops before searching
+
+        return () => clearTimeout(timeout);
+    }, [query]);
 
     return (
         <div>
             <h1>Find Users</h1>
-            <form onSubmit={handleSearch}>
+            <div className="search-wrapper">
                 <input
                     type="text"
-                    placeholder="Search by username"
+                    placeholder="Search by Username"
                     value={query}
                     onChange={e => setQuery(e.target.value)}
                 />
-                <button type="submit">Search</button>
-            </form>
+                <small>Type at Least 2 Characters to Search.</small>
+            </div>
 
-            {searched && results.length === 0 && <p>No users found.</p>}
+            {query.length >= 2 && results.length === 0 && <p>No Users Found.</p>}
 
             <div>
                 {results.map(user => (

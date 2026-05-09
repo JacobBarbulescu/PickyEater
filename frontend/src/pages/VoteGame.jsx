@@ -100,7 +100,7 @@ function VoteGame() {
     }
 
     if (loading) {
-        return <div>Loading...</div>;
+        return null;
     }
 
     if (error){
@@ -123,13 +123,13 @@ function VoteGame() {
             <h1>Would You Rather?</h1>
             <p>Select a preferred food</p>
 
-            {submitting && <p>Submitting vote...</p>}
-
-            {voteComplete && 
-                <button type="button" onClick={getPair}>
-                    Next Vote
-                </button>
-                }
+            <button 
+                type="button" 
+                onClick={getPair}
+                style={{ visibility: voteComplete ? 'visible' : 'hidden' }}
+            >
+                Next Vote
+            </button>
             <div className="food-cards-wrapper">
                 <div className={`food-cards ${submitting ? 'fading' : ''}`}>
                     <VoteCard 
