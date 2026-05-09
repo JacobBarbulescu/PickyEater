@@ -441,3 +441,18 @@ input {
   cursor:default;
   opacity: 1;
 }
+
+small {
+    color: gray;
+    font-size: 0.75rem;
+    margin-top: -0.5rem;
+    display: block;
+}
+
+.search-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 20rem;
+    margin: 1rem auto;
+    gap: 0.5rem;
+}

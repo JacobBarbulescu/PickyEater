@@ -55,18 +55,19 @@ function Upload() {
         <div>
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            <label htmlFor="image">Image: </label>
-            <input
-                type="file"
-                ref={fileInputRef}
-                accept="image/*"
-                onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))}
-            />
-
-            <ImageCropper key={cropperKey} image={imageSrc} setCroppedImage={setCroppedImage} />
-
             <form onSubmit={handleSubmit}>
-                <label htmlFor="name">Food Name: </label>
+                <label htmlFor="image">Image:</label>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*"
+                    onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))}
+                />
+                <small>Accepted formats: JPG, PNG, WebP, GIF</small>
+
+                <ImageCropper key={cropperKey} image={imageSrc} setCroppedImage={setCroppedImage} />
+
+                <label htmlFor="name">Food Name:</label>
                 <input
                     type="text"
                     id="name"
@@ -75,8 +76,8 @@ function Upload() {
                     maxLength={30}
                     required
                 />
-                <br />
-                <br />
+                <small>Letters, spaces, hyphens, apostrophes. Max 30 chars.</small>
+
                 <button type="submit">Upload Food</button>
             </form>
 

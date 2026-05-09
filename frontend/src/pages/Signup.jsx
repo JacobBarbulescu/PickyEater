@@ -23,6 +23,7 @@ function Signup() {
             }
         }
     }
+
     return (
         <div>
             <h1>Sign Up</h1>
@@ -31,14 +32,17 @@ function Signup() {
                 <div>
                     <label>Username:</label>
                     <input type="text" value={username} onChange={e => setUsername(e.target.value)} required />
+                    <small>2-20 chars. Letters, numbers, underscores only.</small>
                 </div>
                 <div>
                     <label>Email:</label>
                     <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+                    <small>Enter a valid email address.</small>
                 </div>
                 <div>
                     <label>Password:</label>
                     <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+                    <small>Min 6 chars. Needs uppercase, number, special char.</small>
                 </div>
                 <button type="submit">Sign Up</button>
             </form>
