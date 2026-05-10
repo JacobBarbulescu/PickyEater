@@ -17,10 +17,10 @@ const exportedMethods = {
     async getTopFoods(limit, page) {
         const foodCollection = await foods();
         const topFoods = await foodCollection.find({})
+            .filter({ status: 'approved' })
             .sort({ wins: -1 })
             .skip(page)
             .limit(limit)
-            .filter({ status: 'approved' })
             .toArray();
 
         return topFoods.map(food => ({
