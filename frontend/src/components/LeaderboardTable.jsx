@@ -1,5 +1,6 @@
 // Jacob — ranked table; accepts a list prop so it works for both foods and players
 import { Link } from 'react-router-dom';
+import FoodImage from './FoodImage';
 
 function LeaderboardTable({ type, items }) {
     return (
@@ -23,7 +24,7 @@ function LeaderboardTable({ type, items }) {
                         items.map((food, index) => (
                             <div key={index} className='admin-item'>
                                 <span>{food.name}</span>
-                                <img src={food.imageUrl} style={{ width: '100px', height: '100px' }} alt={food.name} />
+                                <FoodImage src={food.imageUrl} style={{ width: '100px', height: '100px' }} alt={food.name} />
                                 <span>Wins: {food.wins}</span>
                                 <span>Total Votes: {food.totalVotes}</span>
                                 <span>Win Rate: {food.winRate}</span>
