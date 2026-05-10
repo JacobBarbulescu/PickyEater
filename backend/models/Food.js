@@ -14,6 +14,25 @@ const exportedMethods = {
         return food;
     },
 
+    async getTopFoods(limit, page) {
+        const foodCollection = await foods();
+        const topFoods = await foodCollection.find({})
+            .sort({ wins: -1 })
+            .skip(page)
+            .limit(limit)
+            .toArray();
+
+        return topFoods.map(food => ({
+            id: food._id.toString(),
+            name: food.name,
+            imageUrl: food.imageUrl,
+            wins: food.wins,
+            totalVotes: food.totalVotes,
+            //Also calculate the win rate for easy displaying
+            winRate: (food.totalVotes !== 0 ? `${((food.wins / food.totalVotes) * 100).toFixed(2)}%` : '0%')
+        }));
+    },
+
     async getTwoRandomFoods() {
         const foodCollection = await foods();
         const twoFoods = await foodCollection.aggregate([
