@@ -11,7 +11,7 @@ const exportedMethods = {
         const userCollection = await users();
         const existingUser = await userCollection.findOne({ email: email });
         if (existingUser) throw 'Email is already in use';
-        
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = {
@@ -29,7 +29,7 @@ const exportedMethods = {
         if (!insertInfo.acknowledged) throw 'Could not create user';
         return { registrationSuccess: true };
     },
-    
+
     async login(email, password) {
         email = validation.checkEmail(email);
         password = validation.checkString(password, 'Password');
@@ -55,6 +55,22 @@ const exportedMethods = {
         const user = await userCollection.findOne({ _id: new ObjectId(id) });
         if (!user) throw 'User not found';
         return user;
+    },
+
+    async getTopUsers(limit, page) {
+        const userCollection = await users();
+        const topUsers = await userCollection.find({})
+            .sort({ bestScore: -1 })
+            .skip(page)
+            .limit(limit)
+            .toArray();
+
+        return topUsers.map(user => ({
+            id: user._id.toString(),
+            username: user.username,
+            bestScore: user.bestScore,
+            numVotes: user.numVotes
+        }));
     },
 
     async updateScoreAndBest(userId, currentScore) {
