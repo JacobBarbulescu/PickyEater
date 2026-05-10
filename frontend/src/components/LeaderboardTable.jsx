@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function LeaderboardTable({ type, items }) {
     return (
-        <div classname="admin-list">
+        <div className="admin-list">
             {type === "users" ?
                 (
                     //Users
