@@ -4,6 +4,7 @@ import { ObjectId } from 'mongodb';
 import { foods } from '../config/mongoCollections.js';
 import authMiddleware from '../middleware/auth.js';
 import { adminOnly } from '../middleware/adminOnly.js';
+import fs from 'fs';
 
 const router = express.Router();
 
@@ -36,7 +37,11 @@ router.patch('/approve/:id', authMiddleware, adminOnly, async (req, res) => {
 router.delete('/reject/:id', authMiddleware, adminOnly, async (req, res) => {
     try {
         const foodCollection = await foods();
+        const image = await foodCollection.findOne({ _id: new ObjectId(req.params.id) });
         await foodCollection.deleteOne({ _id: new ObjectId(req.params.id) });
+        //Delete the corresponding image file
+        if (image.path) fs.unlinkSync(image.path);
+
         return res.json({ message: 'Food rejected and deleted' });
     }
     catch (e) {
