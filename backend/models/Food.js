@@ -20,6 +20,7 @@ const exportedMethods = {
             .sort({ wins: -1 })
             .skip(page)
             .limit(limit)
+            .filter({ status: 'approved' })
             .toArray();
 
         return topFoods.map(food => ({
