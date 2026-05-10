@@ -1,6 +1,7 @@
 // Jason — lists pending food submissions; approve / reject via PATCH|DELETE /api/admin
 import React, { useEffect, useState } from 'react';
 import api from '../api/index';
+import FoodImage from '../components/FoodImage';
 
 
 function AdminDashboard() {
@@ -51,7 +52,7 @@ function AdminDashboard() {
                 <div className="admin-list">
                     {pendingFoods.map((food) => (
                         <div key={food._id} className="admin-item">
-                            <img
+                            <FoodImage
                                 src={food.image ? `http://localhost:5000/api/admin/image/${food._id}` : food.imageUrl}
                                 alt={food.name}
                                 className="admin-food-image"
