@@ -15,6 +15,7 @@ import { initVoteSocket } from './sockets/voteSocket.js';
 import adminRoutes from './routes/admin.js';
 import voteRoutes from './routes/votes.js';
 import userRoutes from './routes/users.js';
+import foodsRoutes from './routes/foods.js';
 
 //more imports here
 
@@ -41,6 +42,7 @@ app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/votes', voteRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/foods', foodsRoutes);
 
 // Sockets
 initVoteSocket(io);

@@ -14,11 +14,12 @@ const exportedMethods = {
         return food;
     },
 
-    async getTopFoods(limit, page) {
+    async getTopFoods(limit, page, sortBy, sortDirection) {
         const foodCollection = await foods();
         const topFoods = await foodCollection.find({})
             .filter({ status: 'approved' })
-            .sort({ wins: -1 })
+            .collation({ locale: 'en', strength: 2 })
+            .sort({ [sortBy]: sortDirection })
             .skip(page)
             .limit(limit)
             .toArray();

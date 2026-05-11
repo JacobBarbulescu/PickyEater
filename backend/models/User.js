@@ -57,10 +57,11 @@ const exportedMethods = {
         return user;
     },
 
-    async getTopUsers(limit, page) {
+    async getTopUsers(limit, page, sortBy, sortDirection) {
         const userCollection = await users();
         const topUsers = await userCollection.find({})
-            .sort({ bestScore: -1 })
+            .collation({ locale: 'en', strength: 2 })
+            .sort({ [sortBy]: sortDirection })
             .skip(page)
             .limit(limit)
             .toArray();

@@ -17,8 +17,18 @@ router.get('/users', async (req, res) => {
     if (req.query.page) page = (parseInt(req.query.page) - 1) * limit;
     if (page < 0) return res.status(400).json({ error: "Page must be a positive integer!" });
 
+    //The parameter we sort by
+    const sortParams = ["bestScore", "numVotes", "createdAt", "username"];
+    let sortBy = req.query.sortBy || "bestScore";
+    if (!sortParams.includes(sortBy)) return res.status(400).json({ error: "Invalid sort parameter!" });
+
+    //The direction of the sorting (1 is least to greatest, -1 is greatest to least)
+    let sortDirection = -1;
+    if (req.query.sortDirection) sortDirection = parseInt(req.query.sortDirection);
+    if (!(sortDirection === 1 || sortDirection === -1)) return res.status(400).json({ error: "Invalid sort direction!" });
+
     try {
-        const topUsers = await userMethods.getTopUsers(limit, page);
+        const topUsers = await userMethods.getTopUsers(limit, page, sortBy, sortDirection);
         return res.status(200).json(topUsers);
     } catch (error) {
         console.log(error);
@@ -38,8 +48,18 @@ router.get('/foods', async (req, res) => {
     if (req.query.page) page = (parseInt(req.query.page) - 1) * limit;
     if (page < 0) return res.status(400).json({ error: "Page must be a positive integer!" });
 
+    //The parameter we sort by
+    const sortParams = ["wins", "totalVotes", "createdAt", "name"];
+    let sortBy = req.query.sortBy || "wins";
+    if (!sortParams.includes(sortBy)) return res.status(400).json({ error: "Invalid sort parameter!" });
+
+    //The direction of the sorting (1 is least to greatest, -1 is greatest to least)
+    let sortDirection = -1;
+    if (req.query.sortDirection) sortDirection = parseInt(req.query.sortDirection);
+    if (!(sortDirection === 1 || sortDirection === -1)) return res.status(400).json({ error: "Invalid sort direction!" });
+
     try {
-        const topFoods = await foodMethods.getTopFoods(limit, page);
+        const topFoods = await foodMethods.getTopFoods(limit, page, sortBy, sortDirection);
         return res.status(200).json(topFoods);
     } catch (error) {
         console.log(error);

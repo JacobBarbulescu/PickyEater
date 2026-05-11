@@ -107,3 +107,29 @@ export async function getUserProfile(req, res, next) {
         next();
     }
 }
+
+export async function getFoodStats(req, res, next) {
+    const foodId = req.params.id;
+    const foodKey = `food:${foodId}`;
+
+
+    try {
+        const redisClient = await getRedisClient();
+
+        //If the food is cached, use it
+        if (await redisClient.exists(foodKey)) {
+            console.log("Cache hit");
+            const foodData = await redisClient.json.get(foodKey);
+            return res.status(200).json(foodData);
+        }
+        //Otherwise, move on
+        else {
+            console.log("Cache miss");
+            next();
+        }
+    } catch (e) {
+        //If redis error, simply move on
+        console.error(e);
+        next();
+    }
+}

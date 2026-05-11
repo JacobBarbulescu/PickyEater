@@ -28,6 +28,7 @@ function LeaderboardTable({ type, items }) {
                                 <span>Wins: {food.wins}</span>
                                 <span>Total Votes: {food.totalVotes}</span>
                                 <span>Win Rate: {food.winRate}</span>
+                                <Link to={`/food/${food.id}`}>View Food</Link>
                             </div>
                         ))
                     )

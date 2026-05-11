@@ -7,14 +7,16 @@ const LIMIT = 10;
 
 function Leaderboard() {
     const [typeOfLeaderboard, setTypeOfLeaderboard] = useState("users");
+    const [sortParam, setSortParam] = useState("bestScore");
     const [leaderboardData, setLeaderboardData] = useState([]);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
+    const [sortDirection, setSortDirection] = useState(-1);
 
     async function loadLeaderboard(currentPage) {
         setError(null);
         try {
-            const res = await api.get(`/leaderboard/${typeOfLeaderboard}?page=${currentPage}&limit=${LIMIT}`);
+            const res = await api.get(`/leaderboard/${typeOfLeaderboard}?page=${currentPage}&limit=${LIMIT}&sortBy=${sortParam}&sortDirection=${sortDirection}`);
             setLeaderboardData(res.data);
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error) {
@@ -25,17 +27,23 @@ function Leaderboard() {
         }
     }
 
-    // Reset to page 1 when switching leaderboard type
-    useEffect(() => {
-        setPage(1);
-    }, [typeOfLeaderboard]);
-
-    // Reload whenever page or type changes
+    // Reload whenever page, type, or sort param changes
     useEffect(() => {
         loadLeaderboard(page);
-    }, [page, typeOfLeaderboard]);
+    }, [page, typeOfLeaderboard, sortParam, sortDirection]);
 
     const isLastPage = leaderboardData.length < LIMIT;
+
+    function handleTypeChange(e) {
+        const newType = e.target.value;
+        setTypeOfLeaderboard(newType);
+        setPage(1);
+        if (newType === "users") {
+            setSortParam("bestScore");
+        } else {
+            setSortParam("wins");
+        }
+    }
 
     return (
         <div>
@@ -43,9 +51,38 @@ function Leaderboard() {
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
             <label htmlFor="typeOfLeaderboard">Type of Leaderboard: </label>
-            <select id="typeOfLeaderboard" value={typeOfLeaderboard} onChange={(e) => setTypeOfLeaderboard(e.target.value)}>
+            <select id="typeOfLeaderboard" value={typeOfLeaderboard} onChange={handleTypeChange}>
                 <option value="users">Users</option>
                 <option value="foods">Foods</option>
+            </select>
+
+            <br />
+
+            <label htmlFor="sortParam">Sort By: </label>
+            <select id="sortParam" value={sortParam} onChange={(e) => setSortParam(e.target.value)}>
+                {typeOfLeaderboard === "users" ? (
+                    <>
+                        <option value="bestScore">Best Score</option>
+                        <option value="numVotes">Total Votes</option>
+                        <option value="createdAt">Date Joined</option>
+                        <option value="username">Username</option>
+                    </>
+                ) : (
+                    <>
+                        <option value="wins">Wins</option>
+                        <option value="totalVotes">Total Votes</option>
+                        <option value="createdAt">Date Uploaded</option>
+                        <option value="name">Name</option>
+                    </>
+                )}
+            </select>
+
+            <br />
+
+            <label htmlFor="sortDirection">Sort Direction: </label>
+            <select id="sortDirection" value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
+                <option value="-1">Descending</option>
+                <option value="1">Ascending</option>
             </select>
 
             <LeaderboardTable type={typeOfLeaderboard} items={leaderboardData} />
