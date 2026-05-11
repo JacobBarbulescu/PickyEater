@@ -2,6 +2,7 @@
 import foodData from '../models/Food.js';
 import voteModel from '../models/Vote.js';
 import userData from '../models/User.js';
+import getRedisClient from '../services/redis.js';
 
 export const initVoteSocket = (io) => {
     // Jackson — Socket.io voting logic goes here
@@ -33,13 +34,14 @@ export const initVoteSocket = (io) => {
                 
                 const winFood = await foodData.getFoodById(winFoodId)
                 const lossFood = await foodData.getFoodById(lossFoodId)
+
+                const redisClient = await getRedisClient();
+                await redisClient.del(`user:${userId}`);
+                await redisClient.del(`food:${winFoodId}`);
+                await redisClient.del(`food:${lossFoodId}`);
+
+                socket.emit('voteCreated', { winFood, lossFood });
                 
-                socket.emit('voteCreated', {
-                    winFood,
-                    lossFood
-                });
-
-
             } catch (error) {
                 console.error('Error casting vote:', error);
                 socket.emit('voteError', {
