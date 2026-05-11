@@ -40,7 +40,10 @@ router.delete('/reject/:id', authMiddleware, adminOnly, async (req, res) => {
         const image = await foodCollection.findOne({ _id: new ObjectId(req.params.id) });
         await foodCollection.deleteOne({ _id: new ObjectId(req.params.id) });
         //Delete the corresponding image file
-        if (image.path) fs.unlinkSync(image.path);
+        if (image && image.imageUrl) {
+            const filePath = image.imageUrl.replace('http://localhost:5000/', '');
+            if (filePath.startsWith('uploads/')) fs.unlinkSync(filePath);
+        }
 
         return res.json({ message: 'Food rejected and deleted' });
     }

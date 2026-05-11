@@ -13,23 +13,22 @@ function Leaderboard() {
     const [page, setPage] = useState(1);
     const [sortDirection, setSortDirection] = useState(-1);
 
-    async function loadLeaderboard(currentPage) {
-        setError(null);
-        try {
-            const res = await api.get(`/leaderboard/${typeOfLeaderboard}?page=${currentPage}&limit=${LIMIT}&sortBy=${sortParam}&sortDirection=${sortDirection}`);
-            setLeaderboardData(res.data);
-        } catch (error) {
-            if (error.response && error.response.data && error.response.data.error) {
-                setError(error.response.data.error);
-            } else {
-                setError("An error occurred loading leaderboard");
-            }
-        }
-    }
-
     // Reload whenever page, type, or sort param changes
     useEffect(() => {
-        loadLeaderboard(page);
+        async function loadLeaderboard() {
+            setError(null);
+            try {
+                const res = await api.get(`/leaderboard/${typeOfLeaderboard}?page=${page}&limit=${LIMIT}&sortBy=${sortParam}&sortDirection=${sortDirection}`);
+                setLeaderboardData(res.data);
+            } catch (error) {
+                if (error.response && error.response.data && error.response.data.error) {
+                    setError(error.response.data.error);
+                } else {
+                    setError("An error occurred loading leaderboard");
+                }
+            }
+        }
+        loadLeaderboard();
     }, [page, typeOfLeaderboard, sortParam, sortDirection]);
 
     const isLastPage = leaderboardData.length < LIMIT;
@@ -38,7 +37,7 @@ function Leaderboard() {
         const newType = e.target.value;
         setTypeOfLeaderboard(newType);
         setPage(1);
-        setSortDirection("-1");
+        setSortDirection(-1);
         if (newType === "users") {
             setSortParam("bestScore");
         } else {
@@ -81,7 +80,7 @@ function Leaderboard() {
             <br />
 
             <label htmlFor="sortDirection">Sort Direction: </label>
-            <select id="sortDirection" value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
+            <select id="sortDirection" value={sortDirection} onChange={(e) => setSortDirection(parseInt(e.target.value))}>
                 <option value="-1">Descending</option>
                 <option value="1">Ascending</option>
             </select>
