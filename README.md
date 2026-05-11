@@ -33,6 +33,8 @@ In a separate terminal, from the backend folder:
 node userSeed.js
 node foodSeed.js
 
+You MUST do userSeed.js first, then foodSeed.js for the createdBy field to be set properly
+
 
 ## Test accounts
 

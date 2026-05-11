@@ -1,5 +1,5 @@
 import { dbConnection, closeConnection } from './config/mongoConnection.js';
-import { foods } from './config/mongoCollections.js';
+import { foods, users } from './config/mongoCollections.js';
 
 const seedFoods = [
     { name: 'Pizza', imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400', uploadedBy: 'admin', status: 'approved', totalVotes: 100, wins: 80, createdAt: new Date() },
@@ -19,6 +19,18 @@ async function seed() {
     try {
         const db = await dbConnection();
         const foodCollection = await foods();
+        const userCollection = await users();
+
+        const admin = await userCollection.collecton.findOne({ username: 'admin' });
+        const user2 = await userCollection.collecton.findOne({ username: 'jacob' });
+
+        for (const food of seedFoods) {
+            if (food.uploadedBy == 'admin') {
+                food.uploadedBy = admin._id;
+            } else {
+                food.uploadedBy = user2._id;
+            }
+        }
 
         // clear existing foods
         await foodCollection.deleteMany({});
