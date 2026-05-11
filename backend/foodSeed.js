@@ -26,9 +26,9 @@ async function seed() {
 
         for (const food of seedFoods) {
             if (food.uploadedBy == 'admin') {
-                food.uploadedBy = admin._id;
+                food.uploadedBy = admin._id.toString();
             } else {
-                food.uploadedBy = user2._id;
+                food.uploadedBy = user2._id.toString();
             }
         }
 
