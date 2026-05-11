@@ -1,7 +1,8 @@
 // Jason — public profile view for any user
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getUserProfile } from '../api/index.js';
+import FoodImage from '../components/FoodImage.jsx';
 
 const UserProfile = () => {
     const { id } = useParams();
@@ -32,6 +33,19 @@ const UserProfile = () => {
                     <p className="bio-text">{user.bio}</p>
                 </div>
             )}
+
+            <details>
+                <summary>Food Posted</summary>
+                <div className="admin-list">
+                    {(user.foods || []).map((food, index) => (
+                        <div key={index} className="admin-item">
+                            <p>{food.name}</p>
+                            <FoodImage src={food.imageUrl} alt={food.name} style={{ width: '100px', height: '100px' }} />
+                            <Link to={`/food/${food._id}`}>View Food</Link>
+                        </div>
+                    ))}
+                </div>
+            </details>
 
             <h2>Stats</h2>
             <p><strong>Best Score:</strong> {user.bestScore || 0}</p>
