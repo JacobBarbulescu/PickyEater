@@ -34,7 +34,7 @@ const FoodStats = () => {
             <p><strong>Uploaded by:</strong> <Link to={`/users/${food.uploadedBy}`}> {food.uploadedByName}</Link></p>
 
             <h2>Stats</h2>
-            <p><strong>Win Rate:</strong> {(food.wins / (food.totalVotes + 1)) * 100}%</p>
+            <p><strong>Win Rate:</strong> {((food.wins / (food.totalVotes + 1)) * 100).toFixed(2)}%</p>
             <p><strong>Wins:</strong> {food.wins || 0}</p>
             <p><strong>Total Votes Cast:</strong> {food.totalVotes || 0}</p>
             <p><strong>Date Uploaded:</strong> {new Date(food.createdAt).toLocaleDateString()}</p>

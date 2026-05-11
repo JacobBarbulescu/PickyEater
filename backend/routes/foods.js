@@ -8,6 +8,18 @@ import userData from '../models/User.js';
 
 const router = express.Router();
 
+// GET /api/foods/search?q=
+router.get('/search', async (req, res) => {
+    const { q } = req.query;
+    if (!q || q.trim().length < 2) return res.json([]);
+    try {
+        const foodCollection = await foodFunctions.searchFoods(q.trim());
+        return res.json(foodCollection);
+    } catch (e) {
+        return res.status(500).json({ error: e.message || e.toString() });
+    }
+});
+
 // GET /api/foods/:id
 router.get('/:id', cache.getFoodStats, async (req, res) => {
     try {

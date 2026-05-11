@@ -35,6 +35,19 @@ const exportedMethods = {
         }));
     },
 
+    async searchFoods(q) {
+        const foodCollection = await foods();
+        const results = await foodCollection.find({
+            status: 'approved',
+            name: { $regex: q, $options: 'i' }
+        }).limit(10).toArray();
+        return results.map(food => ({
+            _id: food._id.toString(),
+            name: food.name,
+            imageUrl: food.imageUrl
+        }));
+    },
+
     async getTwoRandomFoods() {
         const foodCollection = await foods();
         const twoFoods = await foodCollection.aggregate([

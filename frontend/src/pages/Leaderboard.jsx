@@ -38,6 +38,7 @@ function Leaderboard() {
         const newType = e.target.value;
         setTypeOfLeaderboard(newType);
         setPage(1);
+        setSortDirection("-1");
         if (newType === "users") {
             setSortParam("bestScore");
         } else {
