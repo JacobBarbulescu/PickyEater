@@ -38,7 +38,6 @@ const FoodStats = () => {
             <p><strong>Wins:</strong> {food.wins || 0}</p>
             <p><strong>Total Votes Cast:</strong> {food.totalVotes || 0}</p>
             <p><strong>Date Uploaded:</strong> {new Date(food.createdAt).toLocaleDateString()}</p>
-            <p><strong>Uploaded by:</strong> </p>
         </div>
     );
 };
