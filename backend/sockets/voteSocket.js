@@ -1,6 +1,7 @@
 // Jackson — Socket.io handlers: "castVote" event, persist to MongoDB, broadcast updated scores
 import foodData from '../models/Food.js';
 import voteModel from '../models/Vote.js';
+import userData from '../models/User.js';
 
 export const initVoteSocket = (io) => {
     // Jackson — Socket.io voting logic goes here
@@ -25,6 +26,7 @@ export const initVoteSocket = (io) => {
 
                 //Vote logic
                 await voteModel.castVote(userId, winFoodId, lossFoodId)
+                await userData.incrementNumVotes(userId)
                 await foodData.incrementVoteCount(winFoodId)
                 await foodData.incrementVoteCount(lossFoodId)
                 await foodData.incrementWins(winFoodId)
