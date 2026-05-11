@@ -29,8 +29,12 @@ router.get('/:id', cache.getFoodStats, async (req, res) => {
         food["uploadedBy"] = food["uploadedBy"].toString();
 
         //It also gets the uploader's username
-        const user = await userData.getUserById(food["uploadedBy"]);
-        food["uploadedByName"] = user.username;
+        try {
+            const user = await userData.getUserById(food["uploadedBy"]);
+            food["uploadedByName"] = user.username;
+        } catch (e) {
+            food["uploadedByName"] = "Unknown";
+        }
 
         //Cache the food
         let redisClient = await getRedisClient();

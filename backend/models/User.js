@@ -51,6 +51,7 @@ const exportedMethods = {
     },
 
     async getUserById(id) {
+        if (!ObjectId.isValid(id)) throw 'Invalid user ID';
         const userCollection = await users();
         const user = await userCollection.findOne({ _id: new ObjectId(id) });
         if (!user) throw 'User not found';

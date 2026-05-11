@@ -22,7 +22,7 @@ Open backend/.env and set JWT_SECRET=anyrandomstring
 ### 3. Start the app
 npm run dev
 
-This starts MongoDB, Redis, and the backend through Docker, and the React frontend locally.
+This starts MongoDB, Redis, and the backend through Docker, and the React frontend locally. This might take a couple of minutes because ImageMagick has to install.
 
 Frontend: http://localhost:5173
 Backend: http://localhost:5000
