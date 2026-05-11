@@ -21,8 +21,8 @@ async function seed() {
         const foodCollection = await foods();
         const userCollection = await users();
 
-        const admin = await userCollection.collecton.findOne({ username: 'admin' });
-        const user2 = await userCollection.collecton.findOne({ username: 'jacob' });
+        const admin = await userCollection.findOne({ username: 'admin' });
+        const user2 = await userCollection.findOne({ username: 'jacob' });
 
         for (const food of seedFoods) {
             if (food.uploadedBy == 'admin') {
