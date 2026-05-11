@@ -1,5 +1,5 @@
 // Jackson — would-you-rather voting mode; Socket.io updates leaderboard in real time
-import {useEffect,useState} from 'react';
+import { useEffect, useState } from 'react';
 import api from '../api';
 import { useAuth } from '../hooks/useAuth';
 import { useSocket } from '../hooks/useSocket';
@@ -7,7 +7,7 @@ import VoteCard from '../components/VoteCard';
 
 
 function VoteGame() {
-    const {currentUser} = useAuth();
+    const { currentUser } = useAuth();
     const socket = useSocket();
 
     const [foodOne, setFoodOne] = useState(null);
@@ -20,8 +20,8 @@ function VoteGame() {
     const [voteComplete, setVoteComplete] = useState(false);
     const [flash, setFlash] = useState('');
 
-    async function getPair(){
-        try{
+    async function getPair() {
+        try {
             setLoading(true);
             setError(null);
             setSelectedFood(null)
@@ -34,8 +34,12 @@ function VoteGame() {
 
             setLoading(false);
             setSubmitting(false);
-        } catch(e){
-            setError('Failed to load food pair. Please try again.');
+        } catch (e) {
+            if (e.response && e.response.data && e.response.data.error) {
+                setError(e.response.data.error);
+            } else {
+                setError('Could not load foods. Try again later.');
+            }
             setLoading(false);
             setSubmitting(false);
         }
@@ -46,9 +50,9 @@ function VoteGame() {
     }, []);
 
     useEffect(() => {
-        if(!socket) return;
+        if (!socket) return;
 
-        function handleVoteCreated(){
+        function handleVoteCreated() {
             setSubmitting(false)
             setVoteComplete(true)
             setFlash('flash-correct')
@@ -58,7 +62,7 @@ function VoteGame() {
             }, 600)
         }
 
-        function handleVoteError(data){
+        function handleVoteError(data) {
             setError(data.error);
             setSubmitting(false);
         }
@@ -71,11 +75,11 @@ function VoteGame() {
             socket.off('voteError', handleVoteError);
         }
     }, [socket]);
-    
-    function handleVote(pickedFood){
+
+    function handleVote(pickedFood) {
         if (!socket || !currentUser || !foodOne || !foodTwo || submitting || voteComplete) return;
 
-        let loseFood 
+        let loseFood
         if (pickedFood._id === foodOne._id) {
             loseFood = foodTwo;
         } else {
@@ -93,7 +97,7 @@ function VoteGame() {
         });
     }
 
-    function getVoteCardStyle(food){
+    function getVoteCardStyle(food) {
         if (!selectedFood) return ''
         if (selectedFood === food._id) return 'guessed'
         return ''
@@ -103,13 +107,13 @@ function VoteGame() {
         return null;
     }
 
-    if (error){
-        return(
+    if (error) {
+        return (
             <div>
                 <p>{error}</p>
                 <button type="button" onClick={getPair}>
                     Try Again
-                    </button>
+                </button>
             </div>
         )
     }
@@ -123,8 +127,8 @@ function VoteGame() {
             <h1>Would You Rather?</h1>
             <p>Select a preferred food</p>
 
-            <button 
-                type="button" 
+            <button
+                type="button"
                 onClick={getPair}
                 style={{ visibility: voteComplete ? 'visible' : 'hidden' }}
             >
@@ -132,16 +136,16 @@ function VoteGame() {
             </button>
             <div className="food-cards-wrapper">
                 <div className={`food-cards ${submitting ? 'fading' : ''}`}>
-                    <VoteCard 
-                        food={foodOne} 
-                        onVote={handleVote} 
-                        disabled={submitting || voteComplete} 
-                        cardStyle={getVoteCardStyle(foodOne)}/>
-                    <VoteCard 
-                        food={foodTwo} 
-                        onVote={handleVote} 
-                        disabled={submitting || voteComplete} 
-                        cardStyle={getVoteCardStyle(foodTwo)}/>
+                    <VoteCard
+                        food={foodOne}
+                        onVote={handleVote}
+                        disabled={submitting || voteComplete}
+                        cardStyle={getVoteCardStyle(foodOne)} />
+                    <VoteCard
+                        food={foodTwo}
+                        onVote={handleVote}
+                        disabled={submitting || voteComplete}
+                        cardStyle={getVoteCardStyle(foodTwo)} />
                 </div>
             </div>
         </div>

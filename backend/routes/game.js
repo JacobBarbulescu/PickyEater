@@ -23,7 +23,7 @@ router.get('/pair', async (req, res) => {
 
         return res.json(twoFoods);
     } catch (e) {
-        return res.status(500).json({ error: e });
+        return res.status(500).json({ error: e.message || e.toString() });
     }
 });
 
@@ -75,7 +75,7 @@ router.post('/guess', cache.guess, async (req, res) => {
             food2: food2
         });
     } catch (e) {
-        return res.status(500).json({ error: e });
+        return res.status(500).json({ error: e.message || e.toString() });
     }
 });
 

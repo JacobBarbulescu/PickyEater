@@ -93,7 +93,11 @@ const Game = () => {
             setFood2(res.data[1]);
             startTimer();
         } catch (e) {
-            setError('Could not load foods. Try again later.');
+            if (e.response && e.response.data && e.response.data.error) {
+                setError(e.response.data.error);
+            } else {
+                setError('Could not load foods. Try again later.');
+            }
         } finally {
             setRoundLoading(false);
             setInitialLoading(false);
@@ -177,13 +181,13 @@ const Game = () => {
                 setShowPlusOne(true);
                 setTimeout(() => setShowPlusOne(false), 800);
                 setTimeout(() => setFlash(''), 600);
-                
+
                 // Automatically go to next round
                 setTimeout(() => {
                     fetchRound();
                 }, 900);
 
-            // Incorrect
+                // Incorrect
             } else {
                 setCorrectFoodId(res.data.correctFoodId);
                 setFinalScore(scoreRef.current);

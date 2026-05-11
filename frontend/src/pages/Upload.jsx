@@ -32,7 +32,6 @@ function Upload() {
             await api.post('/upload', formData);
             setSuccess(true);
         } catch (error) {
-            console.log(error);
             if (error.response && error.response.data && error.response.data.error) {
                 setError(error.response.data.error);
             } else {
