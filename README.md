@@ -1,12 +1,19 @@
+### Instructions on how to run this project
+
 ### 0. Need to have already
-Docker (currently running)
+Docker (currently running on your desktop)
 Node.js
 ### 1. Install dependencies
 npm install
+
 npm run install:all
 
 
-### 2. Create your .env file
+### 2. Environment file
+
+A backend/.env file is included in this submission. No changes are needed.
+
+If .env file not working properly:
 
 cp backend/.env.example backend/.env
 Open backend/.env and set JWT_SECRET=anyrandomstring
@@ -28,10 +35,15 @@ node foodSeed.js
 
 
 ## Test accounts
+
 Admin:
+
 Email - admin@gmail.com
+
 Password - Admin123!
 
 User (Jason):
+
 Email - jason@gmail.com
+
 Password - Jason123!
