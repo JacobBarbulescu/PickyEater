@@ -19,7 +19,7 @@ const exportedMethods = {
         if (!ObjectId.isValid(userId)) throw 'Invalid user ID';
 
         const foodCollection = await foods();
-        const userFoods = await foodCollection.find({ uploadedBy: new ObjectId(userId), status: 'approved' }).toArray();
+        const userFoods = await foodCollection.find({ uploadedBy: userId, status: 'approved' }).toArray();
         return userFoods;
     },
 

@@ -2,6 +2,8 @@
 import jwt from 'jsonwebtoken';
 import express from 'express';
 import userData from '../models/User.js';
+import foodFunctions from '../models/Food.js';
+import voteFunctions from '../models/Vote.js';
 import { authMiddleware } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -46,6 +48,16 @@ router.post('/logout', (req, res) => {
 router.get('/me', authMiddleware, async (req, res) => {
     try {
         const user = await userData.getUserById(req.user.userId);
+
+        const foods = await foodFunctions.getFoodsByUser(req.user.userId);
+        const favoriteFoods = await voteFunctions.getFavoriteFoods(req.user.userId, 3);
+
+        const formattedFoods = foods.map(food => ({
+            _id: food._id.toString(),
+            name: food.name,
+            imageUrl: food.imageUrl
+        }));
+
         return res.json({
             id: user._id.toString(),
             username: user.username,
@@ -54,7 +66,9 @@ router.get('/me', authMiddleware, async (req, res) => {
             bestScore: user.bestScore,
             numVotes: user.numVotes,
             createdAt: user.createdAt,
-            bio: user.bio || ''
+            bio: user.bio || '',
+            foods: formattedFoods,
+            favoriteFoods: favoriteFoods
         });
     } catch (e) {
         return res.status(404).json({ error: 'User not found' });
