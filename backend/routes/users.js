@@ -5,6 +5,7 @@ import getRedisClient from '../services/redis.js';
 import * as cache from '../middleware/redis.js';
 import userFunctions from '../models/User.js';
 import foodFunctions from '../models/Food.js';
+import voteFunctions from '../models/Vote.js';
 
 const router = express.Router();
 
@@ -40,7 +41,9 @@ router.get('/:id', cache.getUserProfile, async (req, res) => {
         //Get the foods that the user posted
         const foods = await foodFunctions.getFoodsByUser(req.params.id);
 
-        console.log(foods);
+        //Get the foods the user voted for the most
+        const favoriteLimit = 3;
+        const favoriteFoods = await voteFunctions.getFavoriteFoods(req.params.id, favoriteLimit);
 
         //Format the foods
         const formattedFoods = foods.map(food => ({
@@ -57,17 +60,17 @@ router.get('/:id', cache.getUserProfile, async (req, res) => {
             bestScore: user.bestScore,
             numVotes: user.numVotes,
             createdAt: user.createdAt,
-            foods: formattedFoods
+            foods: formattedFoods,
+            favoriteFoods: favoriteFoods
         };
 
         //Cache the user
         let redisClient = await getRedisClient();
-        const cachedUser = await redisClient.json.set(`user:${user._id}`, '$', formattedUser);
-        console.log(cachedUser);
+        await redisClient.json.set(`user:${user._id}`, '$', formattedUser);
+        await redisClient.expire(`user:${user._id}`, 3600);
 
         return res.status(200).json(formattedUser);
     } catch (e) {
-        console.error(e);
         return res.status(500).json({ error: e.message || e.toString() });
     }
 });

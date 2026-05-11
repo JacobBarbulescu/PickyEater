@@ -18,6 +18,8 @@ router.get('/pair', async (req, res) => {
         let redisClient = await getRedisClient();
         await redisClient.json.set(`food:${twoFoods[0]._id}`, '$', twoFoods[0]);
         await redisClient.json.set(`food:${twoFoods[1]._id}`, '$', twoFoods[1]);
+        await redisClient.expire(`food:${twoFoods[0]._id}`, 3600);
+        await redisClient.expire(`food:${twoFoods[1]._id}`, 3600);
 
         return res.json(twoFoods);
     } catch (e) {
@@ -52,11 +54,14 @@ router.post('/guess', cache.guess, async (req, res) => {
         let redisClient = await getRedisClient();
         await redisClient.json.set(`food:${food1._id}`, '$', food1);
         await redisClient.json.set(`food:${food2._id}`, '$', food2);
+        await redisClient.expire(`food:${food1._id}`, 3600);
+        await redisClient.expire(`food:${food2._id}`, 3600);
 
         let user = await userData.getUserById(userId);
         delete user.password;
         delete user.email;
         await redisClient.json.set(`user:${userId}`, '$', user);
+        await redisClient.expire(`user:${userId}`, 3600);
 
         // Tie logic
         if (food1WinRate === food2WinRate) {
@@ -84,6 +89,7 @@ router.get('/bestscore/:userId', cache.getBestScore, async (req, res) => {
         delete user.password;
         delete user.email;
         await redisClient.json.set(`user:${userId}`, '$', user);
+        await redisClient.expire(`user:${userId}`, 3600);
 
         return res.json({ bestScore: user.bestScore || 0 });
     } catch (e) {

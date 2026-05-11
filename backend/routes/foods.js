@@ -35,7 +35,7 @@ router.get('/:id', cache.getFoodStats, async (req, res) => {
         //Cache the food
         let redisClient = await getRedisClient();
         const cachedFood = await redisClient.json.set(`food:${food._id}`, '$', food);
-        console.log(cachedFood);
+        await redisClient.expire(`food:${food._id}`, 3600);
 
         return res.status(200).json(food);
     } catch (e) {

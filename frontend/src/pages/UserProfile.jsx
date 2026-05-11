@@ -47,6 +47,20 @@ const UserProfile = () => {
                 </div>
             </details>
 
+            <details>
+                <summary>Favorite Foods</summary>
+                <div className="admin-list">
+                    {(user.favoriteFoods || []).map((food, index) => (
+                        <div key={index} className="admin-item">
+                            <p>{food.name}</p>
+                            <FoodImage src={food.imageUrl} alt={food.name} style={{ width: '100px', height: '100px' }} />
+                            <p>Times Chosen: {food.timesChosen}</p>
+                            <Link to={`/food/${food._id}`}>View Food</Link>
+                        </div>
+                    ))}
+                </div>
+            </details>
+
             <h2>Stats</h2>
             <p><strong>Best Score:</strong> {user.bestScore || 0}</p>
             <p><strong>Total Score:</strong> {user.score || 0}</p>
