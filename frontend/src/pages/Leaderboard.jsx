@@ -87,7 +87,7 @@ function Leaderboard() {
 
             <LeaderboardTable type={typeOfLeaderboard} items={leaderboardData} />
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
+            <div className="pageButtons">
                 <button onClick={() => setPage(p => p - 1)} style={{ display: page === 1 ? "none" : "block" }}>Prev</button>
                 <span>Page {page}</span>
                 <button onClick={() => setPage(p => p + 1)} style={{ display: isLastPage ? "none" : "block" }}>Next</button>
