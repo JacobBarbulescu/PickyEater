@@ -4,6 +4,7 @@ import { users } from '../config/mongoCollections.js';
 import getRedisClient from '../services/redis.js';
 import * as cache from '../middleware/redis.js';
 import userFunctions from '../models/User.js';
+import foodFunctions from '../models/Food.js';
 
 const router = express.Router();
 
@@ -36,6 +37,18 @@ router.get('/:id', cache.getUserProfile, async (req, res) => {
     try {
         const user = await userFunctions.getUserById(req.params.id);
 
+        //Get the foods that the user posted
+        const foods = await foodFunctions.getFoodsByUser(req.params.id);
+
+        console.log(foods);
+
+        //Format the foods
+        const formattedFoods = foods.map(food => ({
+            _id: food._id.toString(),
+            name: food.name,
+            imageUrl: food.imageUrl
+        }));
+
         const formattedUser = {
             _id: user._id.toString(),   // ObjectId must be a string for JSON serialization
             username: user.username,
@@ -43,7 +56,8 @@ router.get('/:id', cache.getUserProfile, async (req, res) => {
             score: user.score,
             bestScore: user.bestScore,
             numVotes: user.numVotes,
-            createdAt: user.createdAt
+            createdAt: user.createdAt,
+            foods: formattedFoods
         };
 
         //Cache the user
@@ -53,6 +67,7 @@ router.get('/:id', cache.getUserProfile, async (req, res) => {
 
         return res.status(200).json(formattedUser);
     } catch (e) {
+        console.error(e);
         return res.status(500).json({ error: e.message || e.toString() });
     }
 });

@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import validation from '../validation.js';
 import foodMethods from '../models/Food.js';
+import getRedisClient from '../services/redis.js';
 
 
 const router = express.Router();
@@ -28,6 +29,10 @@ router.post('/', upload.single('image'), async (req, res) => {
 
         //Insert into database
         await foodMethods.createFood(name, formattedImage, id);
+
+        //Clear the user's cache so we can get the updated food
+        const redisClient = await getRedisClient();
+        await redisClient.del(`user:${id}`);
 
         res.status(200).send("Image upload successfully");
     } catch (e) {

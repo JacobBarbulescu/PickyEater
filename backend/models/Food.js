@@ -14,6 +14,15 @@ const exportedMethods = {
         return food;
     },
 
+    async getFoodsByUser(userId) {
+        userId = validation.checkString(userId, 'ID');
+        if (!ObjectId.isValid(userId)) throw 'Invalid user ID';
+
+        const foodCollection = await foods();
+        const userFoods = await foodCollection.find({ uploadedBy: new ObjectId(userId) }).filter({ status: 'approved' }).toArray();
+        return userFoods;
+    },
+
     async getTopFoods(limit, page, sortBy, sortDirection) {
         const foodCollection = await foods();
         const topFoods = await foodCollection.find({})
